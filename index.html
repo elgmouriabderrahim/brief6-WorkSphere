@@ -4,26 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="./src/output.css" rel="stylesheet">
+    <link rel="icon" href="./src/images/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <title>WorkSphere</title>
 </head>
 <body class="bg-white grid items-center gap-2">
-    <nav class="grid place-items-center w-full bg-neutral-200">
+    <nav class="grid place-items-center w-full bg-black">
         <div class="flex items-center justify-between w-[90%]">
             <div class="flex items-center">
                 <img src="src/images/logo.png" alt="logo" class="h-12">
                 <p class="">WorkSphere</p>
             </div>
-            <i class=" menu fa-solid fa-bars text-black text-2xl"></i>
+            <i class=" menu fa-solid fa-bars text-white black text-2xl"></i>
         </div>
     </nav>
-    <aside class="hidden w-1/2 h-screen bg-black/80 absolute top-0 right-0 z-10 flex-col items-center gap-4 pt-10">
-        <i class="x fa-solid fa-x absolute right-8 top-4 text-lg text-white"></i>
-        <h1 class="US-Container text-white font-black">Unassigned Staff</h1>
-        <div class="bg-white rounded-md p-4 min-h-[50vh] w-[80%]"></div>
-        <button class="text-white rounded-md bg-green-500 py-2 px-4">Add New Worker</button>
+    <aside class="fixed top-0 right-0 z-10 transform translate-x-full w-[95%] h-screen bg-black/90 pt-4 transition-transform duration-200 ease-in-out">
+        <div class="w-[90%] mx-auto flex flex-col gap-2">
+            <i class="x w-full fa-solid fa-x text-lg text-white self-end"></i>
+            <h1 class=" w-full text-white font-black text-center">Unassigned Staff</h1>
+            <div class="US-Container bg-white overflow-y-auto w-full rounded-md p-4 h-[70vh]"></div>
+            <button class="w-full text-white rounded-md bg-green-500 py-2 px-4">Add New Worker</button>
+        </div>
     </aside>
-    <main class="bg-green relative bg-neutral-200 h-auto p-2 rounded-md">
+    <main class="text-xs bg-green relative bg-neutral-200 h-auto p-2 rounded-md">
         <img src="./src/images/bgVertical.png" alt="background design" class="rounded-md md:hidden">
         <div class="department absolute top-2 left-2 w-[calc(100%-16px)] h-[calc(100%-16px)] grid grid-cols-[2%,30.5%,1.5%,1.5%,29.5%,2%,31%,1%] grid-rows-[1%,21.5%,1%,21.5%,1%,15.3%,1%,36.5%,1%] justify-items-center">
             <div class="SalleConference col-start-2 col-span-2 row-start-2 font-bold">SallePersonnel</div>
