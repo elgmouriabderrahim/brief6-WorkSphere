@@ -45,7 +45,6 @@ cancelBtn.addEventListener("click", ()=>{
 })
 
 saveBtn.addEventListener("click", ()=>{
-    console.log("k")
     modal.classList.remove("opacity-100","scale-100","pointer-events-auto", "flex" ,"gap-2");
     const newWorker = {
         name: Name.value,
@@ -56,9 +55,18 @@ saveBtn.addEventListener("click", ()=>{
         localisation :Localisation.value,
         experiences :[]
     }
-    if(Experiences.childNodes)
-    Experiences.childNodes.forEach(exp =>{
-        newWorker.experiences.push(exp.value);
+    Experiences.childNodes.forEach(expdiv =>{
+        const expTitle = expdiv.querySelector("#expTitle");
+        const expStart = expdiv.querySelector("#expStart");
+        const expEnd = expdiv.querySelector("#expEnd");
+        const expDesc = expdiv.querySelector("#expDesc");
+        const exp = {
+            expTitle: expTitle.value,
+            expStart: expStart.value,
+            expEnd: expEnd.value,
+            expDesc: expDesc.value
+        }
+        newWorker.experiences.push(exp);
     })
     const newWorkerDiv = document.createElement("div");
     newWorkerDiv.classList.add("w-full","rounded-md","bg-neutral-200/75", "p-2", "flex", "justify-between", "items-center");
@@ -68,12 +76,18 @@ saveBtn.addEventListener("click", ()=>{
     <span>role: ${newWorker.role}</span>
     `;
     USContainer.append(newWorkerDiv);
-    console.log(newWorker)
+    Experiences.innerHTML = "";
 })
 
 AddExp.addEventListener("click", ()=>{
-    const experience = document.createElement("textarea");
-    experience.setAttribute("placeholder","your work experience");
-    experience.classList.add("w-full", "h-auto", "border", "border-black/50", "rounded-md", "px-2", "py-1");
+    const experience = document.createElement("div");
+    experience.innerHTML = `
+    <input type="text" id="expTitle" placeholder="post" class="w-full px-2 py-1 border rounded">
+    <div class="flex gap-2">
+        <input type="date" id="expStart" class="w-full px-2 py-1 border rounded">
+        <input type="date" id="expEnd" class="w-full px-2 py-1 border rounded">
+    </div>
+    <textarea id="expDesc" placeholder="Description" class="w-full px-2 py-1 border rounded h-20 resize-none"></textarea>
+    `;
     Experiences.append(experience);
 })
