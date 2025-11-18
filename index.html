@@ -26,7 +26,7 @@
             <button class="AddNewWorkerBtn w-full text-white rounded-md bg-green-500 py-1">Add New Worker</button>
         </div>
     </aside>
-    <div class="modal fixed inset-0 bg-black opacity-0 pointer-events-none transition-all duration-300 scale-90 z-50 p-4">
+    <div class="modal fixed inset-0 bg-black opacity-0 pointer-events-none transition-all duration-300 scale-90 z-50 p-4 overflow-y-auto">
         <form class="bg-white p-4 w-full grid grid-cols-1 gap-8 rounded-md">
             <div class="text-center w-full font-bold">Add an employee</div>
 
@@ -68,23 +68,23 @@
             </div>
 
 
-            <div class="flex justify-between">
-                <label class="text-sm font-medium">Expériences professionnelles</label>
-                <button type="button" id="addExp" class="text-sm bg-blue-400/80 text-white px-3 py-1 rounded-md">+ Add</button>
-            </div>
-            <div id="experiences">
+            <div>
+                <div class="flex justify-between">
+                    <label class="text-sm font-medium">Expériences professionnelles</label>
+                    <button type="button" id="addExp" class="text-sm bg-blue-400/80 text-white px-3 py-1 rounded-md border border-black">Add experience</button>
+                </div>
+                <div id="experiences" class="flex flex-col gap-2 h-auto mt-2"></div>
             </div>
 
             <div>
-                <label for="localisation">localisation actuelle</label>
-                <textarea name="localisation" id="localisation" placeholder="enter your current location" class="w-full border border-black rounded-md px-2 py-1" required></textarea>
+                <label for="localisation">localisation actuelle *</label>
+                <input type="text" name="localisation" id="localisation" placeholder="enter your current location" class="w-full border border-black rounded-md px-2 py-1" required>
                 <p id="localisation-error" class="text-red-600 text-sm mt-1 hidden"></p>
             </div>
 
-
             <div class="flex justify-between">
-                <button class="cancel border border-black rounded-md px-8 bg-red-500 hover:bg-red-100 py-1">cancel</button>
-                <button class="valider border border-black rounded-md px-8 bg-green-500 hover:bg-green-100 py-1">valider</button>
+                <button class="savebtn border border-black rounded-md px-8 bg-green-500 hover:bg-green-600 py-1">save</button>
+                <button class="cancelbtn border border-black rounded-md px-8 bg-red-500 hover:bg-red-600 py-1">cancel</button>
             </div>
         </form>
     </div>
