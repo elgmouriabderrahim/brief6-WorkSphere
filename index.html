@@ -22,11 +22,73 @@
         <div class="w-[90%] mx-auto flex flex-col gap-2">
             <i class="x w-full fa-solid fa-x text-lg text-white self-end"></i>
             <h1 class=" w-full text-white font-black text-center">Unassigned Staff</h1>
-            <div class="US-Container bg-white overflow-y-auto w-full rounded-md p-4 h-[70vh]"></div>
-            <button class="w-full text-white rounded-md bg-green-500 py-2 px-4">Add New Worker</button>
+            <div class="US-Container bg-white overflow-y-auto w-full rounded-md p-4 h-[70vh] flex flex-col gap-2"></div>
+            <button class="AddNewWorkerBtn w-full text-white rounded-md bg-green-500 py-1">Add New Worker</button>
         </div>
     </aside>
-    <main class="text-xs bg-green relative bg-neutral-200 h-auto p-2 rounded-md">
+    <div class="modal fixed inset-0 bg-black opacity-0 pointer-events-none transition-all duration-300 scale-90 z-50 p-4 overflow-y-auto">
+        <form class="bg-white p-4 w-full grid grid-cols-1 gap-8 rounded-md">
+            <div class="text-center w-full font-bold">Add an employee</div>
+
+            <div>
+                <label for="name">Name *</label>
+                <input type="text" id="name" placeholder="Enter your full name" class="w-full border border-black rounded-md px-2 py-1" required>
+                <p id="name-error" class="text-red-600 text-sm mt-1 hidden"></p>
+            </div>
+
+            <div>
+                <label for="Role">Role *</label>
+                <select name="role" id="role" class="w-full border border-black rounded-md px-2 py-1" required>
+                    <option value="">select a role</option>
+                    <option value="Receptionniste">Receptionniste</option>
+                    <option value="TechnicienIT">Technicien IT</option>
+                    <option value="AgentDeScurite">Agent de sécurité</option>
+                    <option value="Manager">Manager</option>
+                    <option value="Nettoyage">Nettoyage</option>
+                    <option value="Autre">Autre</option>
+                </select>
+                <p id="role-error" class="text-red-600 text-sm mt-1 hidden"></p>
+            </div>
+
+            <div>
+                <label for="email">Email *</label>
+                <input type="email" id="email" placeholder="Enter your Email" class="w-full border border-black rounded-md px-2 py-1" required>
+                <p id="email-error" class="text-red-600 text-sm mt-1 hidden"></p>
+            </div>
+
+            <div>
+                <label for="phoneNumber">Phone Number *</label>
+                <input type="tel" name="phoneNumber" id="phoneNumber" placeholder="Enter your Phone number" class="w-full border border-black rounded-md px-2 py-1" required>
+                <p id="tel-error" class="text-red-600 text-sm mt-1 hidden"></p>
+            </div>
+            <div>
+                <label for="photo">photo *</label>
+                <input type="text" name="photo" id="photo" placeholder="photo (URL)" class="w-full border border-black rounded-md px-2 py-1" required>
+                <p id="photo-error" class="text-red-600 text-sm mt-1 hidden"></p>
+            </div>
+
+
+            <div>
+                <div class="flex justify-between">
+                    <label class="text-sm font-medium">Expériences professionnelles</label>
+                    <button type="button" id="addExp" class="text-sm bg-blue-400/80 text-white px-3 py-1 rounded-md border border-black">Add experience</button>
+                </div>
+                <div id="experiences" class="flex flex-col gap-2 h-auto mt-2"></div>
+            </div>
+
+            <div>
+                <label for="localisation">localisation actuelle *</label>
+                <input type="text" name="localisation" id="localisation" placeholder="enter your current location" class="w-full border border-black rounded-md px-2 py-1" required>
+                <p id="localisation-error" class="text-red-600 text-sm mt-1 hidden"></p>
+            </div>
+
+            <div class="flex justify-between">
+                <button class="savebtn border border-black rounded-md px-8 bg-green-500 hover:bg-green-600 py-1">save</button>
+                <button class="cancelbtn border border-black rounded-md px-8 bg-red-500 hover:bg-red-600 py-1">cancel</button>
+            </div>
+        </form>
+    </div>
+    <main class="text-xs bg-green relative bg-neutral-300 h-auto p-2 rounded-md">
         <img src="./src/images/bgVertical.png" alt="background design" class="rounded-md md:hidden">
         <div class="department absolute top-2 left-2 w-[calc(100%-16px)] h-[calc(100%-16px)] grid grid-cols-[2%,30.5%,1.5%,1.5%,29.5%,2%,31%,1%] grid-rows-[1%,21.5%,1%,21.5%,1%,15.3%,1%,36.5%,1%] justify-items-center">
             <div class="SalleConference col-start-2 col-span-2 row-start-2 font-bold">SallePersonnel</div>
@@ -40,3 +102,4 @@
     <script src="./src/script.js"></script>
 </body>
 </html>
+ 
