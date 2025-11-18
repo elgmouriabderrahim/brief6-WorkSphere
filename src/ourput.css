@@ -655,8 +655,8 @@ video {
   display: none;
 }
 
-.h-10 {
-  height: 2.5rem;
+.\!h-10 {
+  height: 2.5rem !important;
 }
 
 .h-12 {
@@ -679,8 +679,12 @@ video {
   height: 100vh;
 }
 
-.w-10 {
-  width: 2.5rem;
+.h-10 {
+  height: 2.5rem;
+}
+
+.\!w-10 {
+  width: 2.5rem !important;
 }
 
 .w-\[80\%\] {
@@ -701,6 +705,10 @@ video {
 
 .w-full {
   width: 100%;
+}
+
+.w-10 {
+  width: 2.5rem;
 }
 
 .translate-x-full {
