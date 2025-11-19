@@ -28,8 +28,8 @@ const LocalisationError = document.getElementById("localisation-error");
 let workers = [];
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const phoneRegex = /^[+\d]?(?:[\d\s().-]{6,})$/;
-const nameRegex  = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]{2,}$/;
+const phoneRegex = /^[+\d]?(?:[\d\s-]{10,})$/;
+const nameRegex  = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]{3,}$/;
 
 menu.addEventListener("click", ()=>{
     aside.classList.remove("translate-x-full");
@@ -43,57 +43,97 @@ AddNewWorkerBtn.addEventListener("click", () =>{
     modal.classList.add("opacity-100","scale-100","pointer-events-auto");
 })
 
-
+document.querySelector("form").addEventListener("submit", f =>{
+    f.preventDefault();
+})
 cancelBtn.addEventListener("click", ()=>{
     modal.classList.remove("opacity-100","scale-100","pointer-events-auto");
 })
 
 saveBtn.addEventListener("click", ()=>{
-    modal.classList.remove("opacity-100","scale-100","pointer-events-auto", "flex" ,"gap-2");
-    const newWorker = {
-        id: Date.now(),
-        name: Name.value,
-        role: Role.value,
-        email: Email.value,
-        phoneNumber: PhoneNumber.value,
-        photo: Photo.value,
-        localisation :Localisation.value,
-        experiences :[]
-    }
-    Experiences.childNodes.forEach(expdiv =>{
-        const expTitle = expdiv.querySelector("#expTitle");
-        const expStart = expdiv.querySelector("#expStart");
-        const expEnd = expdiv.querySelector("#expEnd");
-        const expDesc = expdiv.querySelector("#expDesc");
-        const exp = {
-            expTitle: expTitle.value,
-            expStart: expStart.value,
-            expEnd: expEnd.value,
-            expDesc: expDesc.value
-        }
-        newWorker.experiences.push(exp);
-    })
-    workers.push(newWorker);
+    if(!nameRegex.test(Name.value))
+        if(Name.value == "")
+            NameError.innerText = "Please enter your name";
+        else
+            NameError.innerText = "Invalide name";
+    else
+        NameError.innerText = "";
 
-    const newWorkerDiv = document.createElement("div");
-    newWorkerDiv.classList.add("w-full","rounded-md","bg-neutral-200/75", "p-2", "grid", "grid-cols-[20%,40%,40%]");
-    newWorkerDiv.innerHTML = `
-    <img src="${newWorker.photo}" onerror="this.src='./src/images/profile.png'" class="w-12 h-12 place-self-center rounded-full object-cover row-span-3">
-    <span class="font-bold">${newWorker.name}</span>
-    <span>${newWorker.role}</span>
-    <span class="col-span-2">tel: ${newWorker.phoneNumber}</span>
-    <span class="col-span-2">email: ${newWorker.email}</span>
-    <button class="deleteWorkerBtn bg-red-500 rounded-md px-2">remove</button>
-    `;
-    USContainer.append(newWorkerDiv);
-    const deleteWorkerBtn = newWorkerDiv.querySelector(".deleteWorkerBtn");
-    deleteWorkerBtn.addEventListener("click", ()=>{
-        workers = workers.filter(worker => {
-            return worker.id != newWorker.id;
+
+    if(!emailRegex.test(Email.value))
+        if(Email.value == "")
+            EmailError.innerText = "Please enter your email";
+        else
+            EmailError.innerText = "Invalide email";
+    else
+        EmailError.innerText = "";
+
+    if(!phoneRegex.test(PhoneNumber.value))
+        if(PhoneNumber.value == "")
+            TelError.innerText = "Pleae enter your phone number";
+        else
+            TelError.innerText = "Invalide phone number";
+    else
+        TelError.innerText = "";
+
+    if(Role.value == "")
+        RoleError.innerText = "Please select your role";
+    else
+        RoleError.innerText = "";
+
+    if(Localisation.value == "")
+        LocalisationError.innerText = "Please enter your location";
+    else
+        LocalisationError.innerText = "";
+
+    if(emailRegex.test(Email.value) && phoneRegex.test(PhoneNumber.value) && nameRegex.test(Name.value) && Role.value != "" && Localisation.value != ""){
+        console.log("k")
+        modal.classList.remove("opacity-100","scale-100","pointer-events-auto", "flex" ,"gap-2");
+        const newWorker = {
+            id: Date.now(),
+            name: Name.value,
+            role: Role.value,
+            email: Email.value,
+            phoneNumber: PhoneNumber.value,
+            photo: Photo.value,
+            localisation :Localisation.value,
+            experiences :[]
+        }
+        Experiences.childNodes.forEach(expdiv =>{
+            const expTitle = expdiv.querySelector("#expTitle");
+            const expStart = expdiv.querySelector("#expStart");
+            const expEnd = expdiv.querySelector("#expEnd");
+            const expDesc = expdiv.querySelector("#expDesc");
+            const exp = {
+                expTitle: expTitle.value,
+                expStart: expStart.value,
+                expEnd: expEnd.value,
+                expDesc: expDesc.value
+            }
+            newWorker.experiences.push(exp);
         })
-        newWorkerDiv.remove();
-    })
-    Experiences.innerHTML = "";
+        workers.push(newWorker);
+    
+        const newWorkerDiv = document.createElement("div");
+        newWorkerDiv.classList.add("w-full","rounded-md","bg-neutral-200/75", "p-2", "grid", "grid-cols-[15%,45%,40%]");
+        newWorkerDiv.innerHTML = `
+        <img src="${newWorker.photo}" onerror="this.src='./src/images/profile.png'" class="w-12 h-12 place-self-center rounded-full object-cover row-span-4">
+        <span class="font-bold">${newWorker.name}</span>
+        <span>${newWorker.role}</span>
+        <span class="col-span-2">tel: ${newWorker.phoneNumber}</span>
+        <span class="col-span-2">email: ${newWorker.email}</span>
+        <i class="fa-solid fa-trash deleteWorkerBtn text-red-500 w-full text-end col-start-3 justify-self-end"></i>
+        `;
+        USContainer.append(newWorkerDiv);
+        const deleteWorkerBtn = newWorkerDiv.querySelector(".deleteWorkerBtn");
+        deleteWorkerBtn.addEventListener("click", ()=>{
+            workers = workers.filter(worker => {
+                return worker.id != newWorker.id;
+            })
+            newWorkerDiv.remove();
+        })
+        Experiences.innerHTML = "";
+    }
 })
 
 AddExp.addEventListener("click", ()=>{
