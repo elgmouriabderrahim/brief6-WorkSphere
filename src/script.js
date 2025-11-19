@@ -27,6 +27,10 @@ const LocalisationError = document.getElementById("localisation-error");
 
 let workers = [];
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const phoneRegex = /^[+\d]?(?:[\d\s().-]{6,})$/;
+const nameRegex  = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]{2,}$/;
+
 menu.addEventListener("click", ()=>{
     aside.classList.remove("translate-x-full");
 })
@@ -74,12 +78,12 @@ saveBtn.addEventListener("click", ()=>{
     const newWorkerDiv = document.createElement("div");
     newWorkerDiv.classList.add("w-full","rounded-md","bg-neutral-200/75", "p-2", "grid", "grid-cols-[20%,40%,40%]");
     newWorkerDiv.innerHTML = `
-    <img src="${newWorker.photo}" class="w-12 h-12 place-self-center rounded-full object-cover row-span-3">
+    <img src="${newWorker.photo}" onerror="this.src='./src/images/profile.png'" class="w-12 h-12 place-self-center rounded-full object-cover row-span-3">
     <span class="font-bold">${newWorker.name}</span>
     <span>${newWorker.role}</span>
     <span class="col-span-2">tel: ${newWorker.phoneNumber}</span>
     <span class="col-span-2">email: ${newWorker.email}</span>
-    <button class="deleteWorkerBtn bg-red-500 rounded-full px-2">remove</button>
+    <button class="deleteWorkerBtn bg-red-500 rounded-md px-2">remove</button>
     `;
     USContainer.append(newWorkerDiv);
     const deleteWorkerBtn = newWorkerDiv.querySelector(".deleteWorkerBtn");
@@ -94,19 +98,25 @@ saveBtn.addEventListener("click", ()=>{
 
 AddExp.addEventListener("click", ()=>{
     const experience = document.createElement("div");
+    experience.classList.add("relative", "py-4", "bg-neutral-100")
     experience.innerHTML = `
+    <i class="x-exp fa-solid fa-x bg-red-600 absolute top-0 right-0"></i>
     <input type="text" id="expTitle" placeholder="post" class="w-full px-2 py-1 border rounded">
-    <div class="flex gap-4 justify-between">
-     <div>
-        <label for="expStart">start date</label>
-        <input type="date" id="expStart" class="w-full px-2 py-1 border rounded">
+    <div class="flex gap-4 justify-between mt-2">
+        <div>
+            <label for="expStart">start date</label>
+            <input type="date" id="expStart" class="w-full px-2 py-1 border rounded">
+        </div>
+        <div>
+            <label for="expEnd">end date</label>
+            <input type="date" id="expEnd" class="w-full px-2 py-1 border rounded">
+        </div>
     </div>
-    <div>
-        <label for="expEnd">end date</label>
-        <input type="date" id="expEnd" class="w-full px-2 py-1 border rounded">
-    </div>
-    </div>
-    <textarea id="expDesc" placeholder="Description" class="w-full px-2 py-1 border rounded h-20 resize-none"></textarea>
+    <textarea id="expDesc" placeholder="Description" class="w-full px-2 py-1 mt-2 border rounded h-20 resize-none"></textarea>
     `;
+    const xExp = experience.querySelector(".x-exp");
+    xExp.addEventListener("click", () =>{
+        experience.remove();
+    })
     Experiences.append(experience);
 })
