@@ -626,6 +626,10 @@ video {
   grid-row: span 2 / span 2;
 }
 
+.row-span-3 {
+  grid-row: span 3 / span 3;
+}
+
 .row-start-1 {
   grid-row-start: 1;
 }
@@ -727,6 +731,10 @@ video {
   width: 100%;
 }
 
+.w-12 {
+  width: 3rem;
+}
+
 .translate-x-full {
   --tw-translate-x: 100%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
@@ -750,6 +758,10 @@ video {
 
 .grid-cols-\[2\%\2c 30\.5\%\2c 1\.5\%\2c 1\.5\%\2c 29\.5\%\2c 2\%\2c 31\%\2c 1\%\] {
   grid-template-columns: 2% 30.5% 1.5% 1.5% 29.5% 2% 31% 1%;
+}
+
+.grid-cols-\[15\%\2c 45\%\2c 40\%\] {
+  grid-template-columns: 15% 45% 40%;
 }
 
 .grid-rows-\[1\%\2c 21\.5\%\2c 1\%\2c 21\.5\%\2c 1\%\2c 15\.3\%\2c 1\%\2c 36\.5\%\2c 1\%\] {
@@ -936,6 +948,10 @@ video {
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem;
+}
+
+.pt-4 {
+  padding-top: 1rem;
 }
 
 .text-center {

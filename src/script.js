@@ -32,6 +32,23 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phoneRegex = /^[+\d]?(?:[\d\s-]{10,})$/;
 const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]{3,}$/;
 
+
+const SalleConference = document.querySelector(".SalleConference");
+const Reception = document.querySelector(".Reception");
+const SalleServeurs = document.querySelector(".SalleServeurs");
+const SalleSecurite = document.querySelector(".SalleSecurite");
+const SallePersonnel = document.querySelector(".SallePersonnel");
+const SalleArchives = document.querySelector(".SalleArchives");
+
+
+const roleLimits = {
+    Receptionniste: ['SalleConference', 'Reception', 'SallePersonnel', 'SalleArchives'],
+    TechnicienIT: ['SalleConference', 'SalleServeurs', 'SallePersonnel', 'SalleArchives'],
+    AgentDeScurite: ['SalleConference', 'SalleSecurite', 'SallePersonnel', 'SalleArchives'],
+    Manager: ['SalleConference', 'Reception', 'SalleServeurs', 'SalleSecurite', 'SallePersonnel', 'SalleArchives'],
+    Nettoyage: ['SalleConference','Reception','SalleServeurs','SalleSecurite','SallePersonnel'],
+    Autres: ['SalleConference', 'SallePersonnel', 'SalleArchives']
+};
 menu.addEventListener("click", () => {
     aside.classList.remove("translate-x-full");
 })
