@@ -19,16 +19,15 @@ const EmailError = document.getElementById("email-error");
 const PhoneNumber = document.getElementById("phoneNumber");
 const TelError = document.getElementById("tel-error");
 const Photo = document.getElementById("photo");
-const photoError = document.getElementById("photo-error");
 const AddExp = document.getElementById("addExp");
 const Experiences = document.getElementById("experiences");
-const Localisation = document.getElementById("localisation");
-const LocalisationError = document.getElementById("localisation-error");
 
 
 const previmage = document.querySelector(".previmage")
 
 let workers = [];
+let datecheck;
+let experiencestemp = [];
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phoneRegex = /^[+\d]?(?:[\d\s-]{10,})$/;
@@ -85,14 +84,46 @@ saveBtn.addEventListener("click", ()=>{
     else
         RoleError.innerText = "";
 
-    if(Localisation.value == "")
-        LocalisationError.innerText = "Please enter your location";
-    else
-        LocalisationError.innerText = "";
+    if(Experiences.childNodes.length == 0)
+        datecheck = true;
+    Experiences.childNodes.forEach(expdiv =>{
+        const expTitle = expdiv.querySelector("#expTitle");
+        const expStart = expdiv.querySelector("#expStart");
+        const expEnd = expdiv.querySelector("#expEnd");
+        const expDesc = expdiv.querySelector("#expDesc");
+        const experienceErr = expdiv.querySelector("#experienceErr");
+        datecheck = true;
+        if(expTitle.value =="" || expStart.value == " " || expEnd.value == " "){
+            experienceErr.innerText = "fill the experience informations";
+            datecheck = false;
+        }else{
+            if(expStart.value > expEnd.value){
+                datecheck = false;
+                experienceErr.innerText = "experience start date must be greater than end date";
+            }
+            else{
+                datecheck = true;
+                experienceErr.innerText = "";
+                const exp = {
+                    expTitle: expTitle.value,
+                    expStart: expStart.value,
+                    expEnd: expEnd.value,
+                    expDesc: expDesc.value
+                }
+                experiencestemp.push(exp);
+            }
+        }
 
-    if(emailRegex.test(Email.value) && phoneRegex.test(PhoneNumber.value) && nameRegex.test(Name.value) && Role.value != "" && Localisation.value != ""){
-        modal.classList.add("hidden"); 
-        modal.classList.remove("flex"); 
+    })
+
+    if(emailRegex.test(Email.value) &&
+    phoneRegex.test(PhoneNumber.value) &&
+    nameRegex.test(Name.value) &&
+    Role.value != "" &&
+    datecheck
+    ){
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
         const newWorker = {
             id: Date.now(),
             name: Name.value,
@@ -100,22 +131,9 @@ saveBtn.addEventListener("click", ()=>{
             email: Email.value,
             phoneNumber: PhoneNumber.value,
             photo: Photo.value,
-            localisation :Localisation.value,
             experiences :[]
         }
-        Experiences.childNodes.forEach(expdiv =>{
-            const expTitle = expdiv.querySelector("#expTitle");
-            const expStart = expdiv.querySelector("#expStart");
-            const expEnd = expdiv.querySelector("#expEnd");
-            const expDesc = expdiv.querySelector("#expDesc");
-            const exp = {
-                expTitle: expTitle.value,
-                expStart: expStart.value,
-                expEnd: expEnd.value,
-                expDesc: expDesc.value
-            }
-            newWorker.experiences.push(exp);
-        })
+        newWorker.experiences = experiencestemp;
         workers.push(newWorker);
 
         const newWorkerDiv = document.createElement("div");
@@ -136,7 +154,6 @@ saveBtn.addEventListener("click", ()=>{
             })
             newWorkerDiv.remove();
         })
-
         Experiences.innerHTML = "";
     }
 })
@@ -158,6 +175,7 @@ AddExp.addEventListener("click", ()=>{
         </div>
     </div>
     <textarea id="expDesc" placeholder="Description" class="w-full px-2 py-1 mt-2 border rounded h-20 resize-none"></textarea>
+    <p id="experienceErr" class="text-red-600 text-sm mt-1"></p>
     `;
     const xExp = experience.querySelector(".x-exp");
     xExp.addEventListener("click", () =>{
@@ -165,8 +183,8 @@ AddExp.addEventListener("click", ()=>{
     })
     Experiences.append(experience);
 })
+
 Photo.addEventListener("change", ()=>{
-    previmage.classList.remove("hidden");
     previmage.src = Photo.value;
     previmage.onerror = function(){
         previmage.onerror = null;
