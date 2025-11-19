@@ -25,6 +25,9 @@ const Experiences = document.getElementById("experiences");
 const Localisation = document.getElementById("localisation");
 const LocalisationError = document.getElementById("localisation-error");
 
+
+const previmage = document.querySelector(".previmage")
+
 let workers = [];
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -114,11 +117,11 @@ saveBtn.addEventListener("click", ()=>{
             newWorker.experiences.push(exp);
         })
         workers.push(newWorker);
-    
+
         const newWorkerDiv = document.createElement("div");
         newWorkerDiv.classList.add("w-full","rounded-md","bg-neutral-200/75", "p-2", "grid", "grid-cols-[15%,45%,40%]");
         newWorkerDiv.innerHTML = `
-        <img src="${newWorker.photo}" onerror="this.src='./src/images/profile.png'" class="w-12 h-12 place-self-center rounded-full object-cover row-span-4">
+        <img src="${newWorker.photo}" onerror="this.src='./src/images/profile.png'" class="profilephoto w-12 h-12 place-self-center rounded-full object-cover row-span-3">
         <span class="font-bold">${newWorker.name}</span>
         <span>${newWorker.role}</span>
         <span class="col-span-2">tel: ${newWorker.phoneNumber}</span>
@@ -133,6 +136,7 @@ saveBtn.addEventListener("click", ()=>{
             })
             newWorkerDiv.remove();
         })
+
         Experiences.innerHTML = "";
     }
 })
@@ -160,4 +164,12 @@ AddExp.addEventListener("click", ()=>{
         experience.remove();
     })
     Experiences.append(experience);
+})
+Photo.addEventListener("change", ()=>{
+    previmage.classList.remove("hidden");
+    previmage.src = Photo.value;
+    previmage.onerror = function(){
+        previmage.onerror = null;
+        previmage.src = "./src/images/profile.png";
+    }
 })

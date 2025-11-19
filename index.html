@@ -26,8 +26,8 @@
             <button class="AddNewWorkerBtn w-full text-white rounded-md bg-green-500 py-1">Add New Worker</button>
         </div>
     </aside>
-    <div class="modal fixed inset-0 bg-black hidden gap-2 z-50 p-4 overflow-y-auto">
-        <form class="bg-white p-4 w-full grid grid-cols-1 gap-8 rounded-md">
+    <div class="modal fixed inset-0 bg-black hidden gap-2 z-50 p-4">
+        <form class="bg-white p-4 w-full h-auto grid grid-cols-1 gap-8 rounded-md overflow-y-auto">
             <div class="text-center w-full font-bold">Add an employee</div>
 
             <div>
@@ -61,12 +61,12 @@
                 <input type="tel" name="phoneNumber" id="phoneNumber" placeholder="Enter your Phone number" class="w-full border border-black rounded-md px-2 py-1">
                 <p id="tel-error" class="text-red-600 text-sm mt-1"></p>
             </div>
-            <div>
-                <label for="photo">photo *</label>
-                <input type="text" name="photo" id="photo" placeholder="photo (URL)" class="w-full border border-black rounded-md px-2 py-1">
+            <div class="relative">
+                <label for="photo">Photo *</label>
+                <input type="text" name="photo" id="photo" placeholder="photo (URL)" class="photo w-full border border-black rounded-md px-2 py-1">
                 <p id="photo-error" class="text-red-600 text-sm mt-1"></p>
+                <img src="" class="previmage hidden w-16 h-16 rounded-full object-cover absolute top-1/2 -translate-y-1/2 right-0"></img>
             </div>
-
 
             <div>
                 <div class="flex justify-between">
