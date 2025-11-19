@@ -25,7 +25,7 @@ const Experiences = document.getElementById("experiences");
 const Localisation = document.getElementById("localisation");
 const LocalisationError = document.getElementById("localisation-error");
 
-const workers = [];
+let workers = [];
 
 menu.addEventListener("click", ()=>{
     aside.classList.remove("translate-x-full");
@@ -47,6 +47,7 @@ cancelBtn.addEventListener("click", ()=>{
 saveBtn.addEventListener("click", ()=>{
     modal.classList.remove("opacity-100","scale-100","pointer-events-auto", "flex" ,"gap-2");
     const newWorker = {
+        id: Date.now(),
         name: Name.value,
         role: Role.value,
         email: Email.value,
@@ -68,14 +69,26 @@ saveBtn.addEventListener("click", ()=>{
         }
         newWorker.experiences.push(exp);
     })
+    workers.push(newWorker);
+
     const newWorkerDiv = document.createElement("div");
-    newWorkerDiv.classList.add("w-full","rounded-md","bg-neutral-200/75", "p-2", "flex", "justify-between", "items-center");
+    newWorkerDiv.classList.add("w-full","rounded-md","bg-neutral-200/75", "p-2", "grid", "grid-cols-[20%,40%,40%]");
     newWorkerDiv.innerHTML = `
-    <img src="${newWorker.photo}" class="w-10 h-10 rounded-full object-cover">
-    <span>name: ${newWorker.name}</span>
-    <span>role: ${newWorker.role}</span>
+    <img src="${newWorker.photo}" class="w-12 h-12 place-self-center rounded-full object-cover row-span-3">
+    <span class="font-bold">${newWorker.name}</span>
+    <span>${newWorker.role}</span>
+    <span class="col-span-2">tel: ${newWorker.phoneNumber}</span>
+    <span class="col-span-2">email: ${newWorker.email}</span>
+    <button class="deleteWorkerBtn bg-red-500 rounded-full px-2">remove</button>
     `;
     USContainer.append(newWorkerDiv);
+    const deleteWorkerBtn = newWorkerDiv.querySelector(".deleteWorkerBtn");
+    deleteWorkerBtn.addEventListener("click", ()=>{
+        workers = workers.filter(worker => {
+            return worker.id != newWorker.id;
+        })
+        newWorkerDiv.remove();
+    })
     Experiences.innerHTML = "";
 })
 
@@ -83,9 +96,15 @@ AddExp.addEventListener("click", ()=>{
     const experience = document.createElement("div");
     experience.innerHTML = `
     <input type="text" id="expTitle" placeholder="post" class="w-full px-2 py-1 border rounded">
-    <div class="flex gap-2">
+    <div class="flex gap-4 justify-between">
+     <div>
+        <label for="expStart">start date</label>
         <input type="date" id="expStart" class="w-full px-2 py-1 border rounded">
+    </div>
+    <div>
+        <label for="expEnd">end date</label>
         <input type="date" id="expEnd" class="w-full px-2 py-1 border rounded">
+    </div>
     </div>
     <textarea id="expDesc" placeholder="Description" class="w-full px-2 py-1 border rounded h-20 resize-none"></textarea>
     `;
