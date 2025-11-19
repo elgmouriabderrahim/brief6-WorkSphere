@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="./src/output.css" rel="stylesheet">
     <link rel="icon" href="./src/images/logo.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>WorkSphere</title>
 </head>
-<body class="bg-white grid items-center gap-2">
-    <nav class="grid place-items-center w-full bg-black">
+
+<body class="bg-white grid grid-cols-1 md:grid-cols-[1fr,3fr] items-center gap-2">
+    <nav class="grid place-items-center w-full bg-black col-span-full">
         <div class="flex items-center justify-between w-[90%]">
             <div class="flex items-center">
                 <img src="src/images/logo.png" alt="logo" class="h-12">
-                <p class="">WorkSphere</p>
+                <p class="text-white">WorkSphere</p>
             </div>
-            <i class=" menu fa-solid fa-bars text-white black text-2xl"></i>
+            <div class="md:hidden">
+                <i class="menu fa-solid fa-bars text-white black text-2xl"></i>
+            </div>
         </div>
     </nav>
-    <aside class="fixed top-0 right-0 z-10 transform translate-x-full w-[95%] h-screen bg-black/90 pt-4 transition-transform duration-200 ease-in-out">
+    <aside class="fixed md:static top-0 right-0 z-10 transform  w-full h-screen md:h-auto bg-black/90 py-4 translate-x-full md:translate-x-0 md:rounded-md transition-transform duration-200 ease-in-out place-self-center">
         <div class="w-[90%] mx-auto flex flex-col gap-2">
             <i class="x w-full fa-solid fa-x text-lg text-white self-end"></i>
             <h1 class=" w-full text-white font-black text-center">Unassigned Staff</h1>
@@ -26,8 +30,8 @@
             <button class="AddNewWorkerBtn w-full text-white rounded-md bg-green-500 py-1">Add New Worker</button>
         </div>
     </aside>
-    <div class="modal fixed inset-0 bg-black hidden gap-2 z-50 p-4">
-        <form class="bg-white h-auto p-4 w-full grid grid-cols-1 gap-8 rounded-md overflow-y-auto">
+    <div class="modal fixed inset-0 bg-black md:bg-black/50 backdrop-blur-md hidden gap-2 z-50 p-4">
+        <form class="bg-white h-auto p-4 w-[90%] md:w-[400px] grid grid-cols-1 gap-8 rounded-md overflow-y-auto mx-auto">
             <div class="text-center w-full font-bold">Add an employee</div>
 
             <div>
@@ -37,7 +41,7 @@
             </div>
 
             <div>
-                <label for="Role">Role *</label>
+                <label for="role">Role *</label> <!-- FIXED -->
                 <select name="role" id="role" class="w-full border border-black rounded-md px-2 py-1">
                     <option value="">select a role</option>
                     <option value="Receptionniste">Receptionniste</option>
@@ -62,8 +66,8 @@
                 <p id="tel-error" class="text-red-600 text-sm mt-1"></p>
             </div>
             <div class="flex">
-                <img src="./src/images/profile.png" class="previmage w-16 h-16 rounded-full object-cover"></img>
-                <div  class="flex flex-col w-[calc(100%-64px)]">
+                <img src="./src/images/profile.png" class="previmage w-16 h-16 rounded-full object-cover"> <!-- FIXED -->
+                <div class="flex flex-col w-[calc(100%-64px)]">
                     <label for="photo">Photo *</label>
                     <input type="text" name="photo" id="photo" placeholder="photo (URL)" class="photo w-full border border-black rounded-md px-2 py-1">
                 </div>
@@ -85,15 +89,23 @@
     </div>
     <main class="text-xs bg-green relative bg-neutral-300 h-auto p-2 rounded-md">
         <img src="./src/images/bgVertical.png" alt="background design" class="rounded-md md:hidden">
-        <div class="department absolute top-2 left-2 w-[calc(100%-16px)] h-[calc(100%-16px)] grid grid-cols-[2%,30.5%,1.5%,1.5%,29.5%,2%,31%,1%] grid-rows-[1%,21.5%,1%,21.5%,1%,15.3%,1%,36.5%,1%] justify-items-center">
-            <div class="SalleConference col-start-2 col-span-2 row-start-2 font-bold">SallePersonnel</div>
-            <div class="Réception col-start-7 row-start-2 font-bold">SalleServeurs</div>
-            <div class="SalleServeurs col-start-2 row-start-4 col-span-2 font-bold">SalleArchives</div>
-            <div class="SalleSecurite col-start-7 row-start-4 font-bold">SalleSecurite</div>
-            <div class="SallePersonnel col-start-2 row-start-8 font-bold">SalleConference</div>
-            <div class="SalleArchives col-start-4 col-span-4 row-start-8 font-bold">Réception</div>
+        <img src="./src/images/bgHorizontal.png" alt="background design" class="rounded-md hidden md:inline">
+        <div class="department absolute top-2 left-2 w-[calc(100%-16px)] h-[calc(100%-16px)] grid grid-cols-[2%,30.5%,1.5%,1.5%,29.5%,2%,31%,1%] grid-rows-[1%,21.5%,1%,21.5%,1%,15.3%,1%,36.5%,1%] justify-items-center md:grid-rows-[2%,31%,2%,29.5%,1.5%,1.5%,30.5%,2%] md:grid-cols-[1%,21.5%,1%,21%,0.5%,1%,15.3%,1%,36.5%,1%]">
+
+            <div class="SalleConference col-start-2 row-start-2 col-span-2 md:row-start-6 md:col-start-2 md:col-span-1 md:row-span-2 font-bold w-full text-center bg-green-300/50">SallePersonnel</div>
+
+            <div class="Reception col-start-7 row-start-2 md:col-start-2 md:row-start-2 font-bold w-full text-center bg-red-300/50">SalleServeurs</div> <!-- FIXED -->
+
+            <div class="SalleServeurs col-start-2 row-start-4 col-span-2 md:col-start-4 md:row-start-6 md:row-span-2 font-bold w-full text-center bg-blue-300/50">SalleArchives</div>
+
+            <div class="SalleSecurite col-start-7 row-start-4 md:col-start-4 md:row-start-2 font-bold w-full text-center bg-yellow-300/50">SalleSecurite</div>
+
+            <div class="SallePersonnel col-start-2 row-start-8 md:col-start-9 md:row-start-7 font-bold w-full text-center bg-teal-300/50">SalleConference</div>
+
+            <div class="SalleArchives col-start-4 col-span-4 row-start-8 md:col-start-9 md:row-start-2 md:row-span-4  md:col-span-1 font-bold w-full text-center bg-neutral-600/50">Reception</div> <!-- FIXED -->
         </div>
     </main>
     <script src="./src/script.js"></script>
 </body>
+
 </html>

@@ -22,7 +22,6 @@ const Photo = document.getElementById("photo");
 const AddExp = document.getElementById("addExp");
 const Experiences = document.getElementById("experiences");
 
-
 const previmage = document.querySelector(".previmage")
 
 let workers = [];
@@ -31,78 +30,86 @@ let experiencestemp = [];
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phoneRegex = /^[+\d]?(?:[\d\s-]{10,})$/;
-const nameRegex  = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]{3,}$/;
+const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]{3,}$/;
 
-menu.addEventListener("click", ()=>{
+menu.addEventListener("click", () => {
     aside.classList.remove("translate-x-full");
 })
-x.addEventListener("click", ()=>{
+x.addEventListener("click", () => {
     aside.classList.add("translate-x-full");
 })
 
-AddNewWorkerBtn.addEventListener("click", () =>{
+AddNewWorkerBtn.addEventListener("click", () => {
     modal.classList.add("flex");
     modal.classList.remove("hidden")
 })
 
-document.querySelector("form").addEventListener("submit", f =>{
+document.querySelector("form").addEventListener("submit", f => {
     f.preventDefault();
 })
-cancelBtn.addEventListener("click", ()=>{
+
+cancelBtn.addEventListener("click", () => {
     modal.classList.remove("flex");
-    modal.classList.add("hidden") 
+    modal.classList.add("hidden")
 })
 
-saveBtn.addEventListener("click", ()=>{
-    if(!nameRegex.test(Name.value))
-        if(Name.value == "")
+saveBtn.addEventListener("click", () => {
+
+    experiencestemp = [];
+
+    if (!nameRegex.test(Name.value))
+        if (Name.value == "")
             NameError.innerText = "Please enter your name";
         else
             NameError.innerText = "Invalide name";
     else
         NameError.innerText = "";
 
-
-    if(!emailRegex.test(Email.value))
-        if(Email.value == "")
+    if (!emailRegex.test(Email.value))
+        if (Email.value == "")
             EmailError.innerText = "Please enter your email";
         else
             EmailError.innerText = "Invalide email";
     else
         EmailError.innerText = "";
 
-    if(!phoneRegex.test(PhoneNumber.value))
-        if(PhoneNumber.value == "")
+    if (!phoneRegex.test(PhoneNumber.value))
+        if (PhoneNumber.value == "")
             TelError.innerText = "Pleae enter your phone number";
         else
             TelError.innerText = "Invalide phone number";
     else
         TelError.innerText = "";
 
-    if(Role.value == "")
+    if (Role.value == "")
         RoleError.innerText = "Please select your role";
     else
         RoleError.innerText = "";
 
-    if(Experiences.childNodes.length == 0)
+    datecheck = true;
+
+    if (Experiences.children.length == 0)
         datecheck = true;
-    Experiences.childNodes.forEach(expdiv =>{
-        const expTitle = expdiv.querySelector("#expTitle");
-        const expStart = expdiv.querySelector("#expStart");
-        const expEnd = expdiv.querySelector("#expEnd");
-        const expDesc = expdiv.querySelector("#expDesc");
-        const experienceErr = expdiv.querySelector("#experienceErr");
-        datecheck = true;
-        if(expTitle.value =="" || expStart.value == " " || expEnd.value == " "){
+
+    [...Experiences.children].forEach(expdiv => {
+        const expTitle = expdiv.querySelector(".expTitle");
+        const expStart = expdiv.querySelector(".expStart");
+        const expEnd = expdiv.querySelector(".expEnd");
+        const expDesc = expdiv.querySelector(".expDesc");
+        const experienceErr = expdiv.querySelector(".experienceErr");
+
+        if (expTitle.value == "" || expStart.value == "" || expEnd.value == "") {
             experienceErr.innerText = "fill the experience informations";
             datecheck = false;
-        }else{
-            if(expStart.value > expEnd.value){
+        } else {
+
+            const startDate = new Date(expStart.value);
+            const endDate = new Date(expEnd.value);
+            console.log("startDate:",startDate);
+            if (startDate > endDate) {
                 datecheck = false;
                 experienceErr.innerText = "experience start date must be greater than end date";
-            }
-            else{
-                datecheck = true;
+            } else {
                 experienceErr.innerText = "";
                 const exp = {
                     expTitle: expTitle.value,
@@ -116,12 +123,12 @@ saveBtn.addEventListener("click", ()=>{
 
     })
 
-    if(emailRegex.test(Email.value) &&
-    phoneRegex.test(PhoneNumber.value) &&
-    nameRegex.test(Name.value) &&
-    Role.value != "" &&
-    datecheck
-    ){
+    if (emailRegex.test(Email.value) &&
+        phoneRegex.test(PhoneNumber.value) &&
+        nameRegex.test(Name.value) &&
+        Role.value != "" &&
+        datecheck
+    ) {
         modal.classList.add("hidden");
         modal.classList.remove("flex");
         const newWorker = {
@@ -131,63 +138,66 @@ saveBtn.addEventListener("click", ()=>{
             email: Email.value,
             phoneNumber: PhoneNumber.value,
             photo: Photo.value,
-            experiences :[]
+            experiences: []
         }
         newWorker.experiences = experiencestemp;
         workers.push(newWorker);
 
         const newWorkerDiv = document.createElement("div");
-        newWorkerDiv.classList.add("w-full","rounded-md","bg-neutral-200/75", "p-2", "grid", "grid-cols-[15%,45%,40%]");
+        newWorkerDiv.classList.add("w-full", "rounded-md", "bg-neutral-200/75", "p-2", "text-sm", "grid", "grid-cols-[15%,1fr]");
         newWorkerDiv.innerHTML = `
-        <img src="${newWorker.photo}" onerror="this.src='./src/images/profile.png'" class="profilephoto w-12 h-12 place-self-center rounded-full object-cover row-span-3">
-        <span class="font-bold">${newWorker.name}</span>
-        <span>${newWorker.role}</span>
-        <span class="col-span-2">tel: ${newWorker.phoneNumber}</span>
-        <span class="col-span-2">email: ${newWorker.email}</span>
+        <img src="${newWorker.photo}" onerror="this.src='./src/images/profile.png'" class="profilephoto w-8 h-8 place-self-center rounded-full object-cover row-span-2">
+        <span class="font-bold col-start-2 row-start-1">${newWorker.name}</span>
+        <span class="col-start-2 row-start-2">${newWorker.role}</span>
         <i class="fa-solid fa-trash deleteWorkerBtn text-red-500 w-full text-end col-start-3 justify-self-end"></i>
         `;
         USContainer.append(newWorkerDiv);
         const deleteWorkerBtn = newWorkerDiv.querySelector(".deleteWorkerBtn");
-        deleteWorkerBtn.addEventListener("click", ()=>{
-            workers = workers.filter(worker => {
-                return worker.id != newWorker.id;
-            })
+        deleteWorkerBtn.addEventListener("click", () => {
+            workers = workers.filter(worker => worker.id != newWorker.id);
             newWorkerDiv.remove();
         })
+
         Experiences.innerHTML = "";
+
+        Name.value = "";
+        Email.value = "";
+        PhoneNumber.value = "";
+        Role.value = "";
+        Photo.value = "";
+        previmage.src = "./src/images/profile.png";
     }
 })
 
-AddExp.addEventListener("click", ()=>{
+AddExp.addEventListener("click", () => {
     const experience = document.createElement("div");
     experience.classList.add("relative", "py-4", "bg-neutral-100")
     experience.innerHTML = `
     <i class="x-exp fa-solid fa-x bg-red-600 absolute top-0 right-0"></i>
-    <input type="text" id="expTitle" placeholder="post" class="w-full px-2 py-1 border rounded">
+    <input type="text" placeholder="post" class="expTitle w-full px-2 py-1 border rounded">
     <div class="flex gap-4 justify-between mt-2">
         <div>
-            <label for="expStart">start date</label>
-            <input type="date" id="expStart" class="w-full px-2 py-1 border rounded">
+            <label>start date</label>
+            <input type="date" class="expStart w-full px-2 py-1 border rounded">
         </div>
         <div>
-            <label for="expEnd">end date</label>
-            <input type="date" id="expEnd" class="w-full px-2 py-1 border rounded">
+            <label>end date</label>
+            <input type="date" class="expEnd w-full px-2 py-1 border rounded">
         </div>
     </div>
-    <textarea id="expDesc" placeholder="Description" class="w-full px-2 py-1 mt-2 border rounded h-20 resize-none"></textarea>
-    <p id="experienceErr" class="text-red-600 text-sm mt-1"></p>
+    <textarea placeholder="Description" class="expDesc w-full px-2 py-1 mt-2 border rounded h-20 resize-none"></textarea>
+    <p class="experienceErr text-red-600 text-sm mt-1"></p>
     `;
     const xExp = experience.querySelector(".x-exp");
-    xExp.addEventListener("click", () =>{
+    xExp.addEventListener("click", () => {
         experience.remove();
     })
     Experiences.append(experience);
 })
 
-Photo.addEventListener("change", ()=>{
-    previmage.src = Photo.value;
-    previmage.onerror = function(){
-        previmage.onerror = null;
+Photo.addEventListener("change", () => {
+    previmage.onerror = function() {
         previmage.src = "./src/images/profile.png";
-    }
-})
+    };
+    previmage.src = Photo.value;
+});
