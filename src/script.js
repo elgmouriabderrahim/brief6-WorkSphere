@@ -39,15 +39,16 @@ x.addEventListener("click", ()=>{
 })
 
 AddNewWorkerBtn.addEventListener("click", () =>{
-    modal.classList.remove("scale-90");
-    modal.classList.add("opacity-100","scale-100","pointer-events-auto");
+    modal.classList.add("flex");
+    modal.classList.remove("hidden")
 })
 
 document.querySelector("form").addEventListener("submit", f =>{
     f.preventDefault();
 })
 cancelBtn.addEventListener("click", ()=>{
-    modal.classList.remove("opacity-100","scale-100","pointer-events-auto");
+    modal.classList.remove("flex");
+    modal.classList.add("hidden") 
 })
 
 saveBtn.addEventListener("click", ()=>{
@@ -87,8 +88,8 @@ saveBtn.addEventListener("click", ()=>{
         LocalisationError.innerText = "";
 
     if(emailRegex.test(Email.value) && phoneRegex.test(PhoneNumber.value) && nameRegex.test(Name.value) && Role.value != "" && Localisation.value != ""){
-        console.log("k")
-        modal.classList.remove("opacity-100","scale-100","pointer-events-auto", "flex" ,"gap-2");
+        modal.classList.add("hidden"); 
+        modal.classList.remove("flex"); 
         const newWorker = {
             id: Date.now(),
             name: Name.value,
