@@ -40,6 +40,8 @@ const SalleSecurite = document.querySelector(".SalleSecurite");
 const SallePersonnel = document.querySelector(".SallePersonnel");
 const SalleArchives = document.querySelector(".SalleArchives");
 
+const plusBtns = document.querySelectorAll(".plusBtn");
+
 
 const roleLimits = {
     Receptionniste: ['SalleConference', 'Reception', 'SallePersonnel', 'SalleArchives'],
@@ -218,3 +220,50 @@ Photo.addEventListener("change", () => {
     };
     previmage.src = Photo.value;
 });
+
+function checkWorkerRole(workerRole, selectedspace){
+    let isvalid = false;
+    roleLimits[workerRole].forEach(space =>{
+        if(space == selectedspace){
+            isvalid = true;
+        }
+    })
+    return isvalid;
+}
+
+[...plusBtns].forEach(plusBtn => {
+    plusBtn.addEventListener("click", ()=>{
+        const pop = document.createElement("div");
+        pop.className = "pop inset-0 bg-black/50 backdrop-blur-md absolute grid place-items-center z-50";
+        pop.innerHTML = `
+            <div class="filteredlist relative flex flex-col gap-2 w-[300px] p-2 h-[70vh] overflow-y-auto bg-white rounded-md">
+                <div class="x-filteredlist text-red-600 absolute top-0 right-0 w-8 h-8">
+                    <i class="fa-solid fa-x"></i>
+                </div>
+                <p class="font-bold text-black text-center">choose a worker</p>
+            </div>
+        `;
+        document.body.append(pop)
+
+
+        
+        const filteredlist = document.querySelector(".filteredlist");
+        const xFilteredList = document.querySelector(".x-filteredlist");
+        xFilteredList.addEventListener("click", ()=>{
+            filteredlist.parentElement.remove();
+        })
+        workers.forEach(worker =>{
+            if(checkWorkerRole(worker.role, plusBtn.getAttribute("id"))){
+                const workerDiv = document.createElement("div");
+                workerDiv.classList.add("w-full", "rounded-md", "bg-neutral-200/75", "p-2", "text-sm", "grid", "grid-cols-[15%,1fr]");
+                workerDiv.innerHTML = `
+                <img src="${worker.photo}" onerror="this.src='./src/images/profile.png'" class="profilephoto w-8 h-8 place-self-center rounded-full object-cover row-span-2">
+                <span class="font-bold col-start-2 row-start-1">${worker.name}</span>
+                <span class="col-start-2 row-start-2">${worker.role}</span>
+                `;
+                filteredlist.append(workerDiv);
+            }
+        })
+
+    })
+})
