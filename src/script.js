@@ -184,7 +184,7 @@ function appendworker(newWorker){
     <img src="${newWorker.photo}" onerror="this.src='./src/images/profile.png'" class="profilephoto w-8 h-8 place-self-center rounded-full object-cover row-span-2">
     <span class="font-bold col-start-2 row-start-1">${newWorker.name}</span>
     <span class="col-start-2 row-start-2">${newWorker.role}</span>
-    <i class="fa-solid fa-trash deleteWorkerBtn text-red-500 w-full text-end col-start-3 justify-self-end"></i>
+    <i class="fa-solid fa-trash deleteWorkerBtn cursor-pointer hover:text-red-600 text-red-500 w-full text-end col-start-3 justify-self-end"></i>
     `;
     USContainer.append(newWorkerDiv);
     const deleteWorkerBtn = newWorkerDiv.querySelector(".deleteWorkerBtn");
@@ -199,7 +199,7 @@ AddExp.addEventListener("click", () => {
     const experience = document.createElement("div");
     experience.classList.add("relative", "py-4", "bg-neutral-100")
     experience.innerHTML = `
-    <i class="x-exp fa-solid fa-x bg-red-600 absolute top-0 right-0"></i>
+    <i class="x-exp fa-solid fa-x cursor-pointer bg-red-600 absolute top-0 right-0"></i>
     <input type="text" placeholder="post" class="expTitle w-full px-2 py-1 border rounded">
     <div class="flex gap-4 justify-between mt-2">
         <div>
@@ -244,8 +244,8 @@ function checkWorkerRole(workerRole, selectedspace){
         pop.className = "pop inset-0 bg-black/50 backdrop-blur-md absolute grid place-items-center z-50";
         pop.innerHTML = `
             <div class="filteredlist relative flex flex-col gap-2 w-[300px] p-2 h-[70vh] overflow-y-auto bg-white rounded-md">
-                <div class="x-filteredlist text-red-600 absolute top-0 right-0 w-8 h-8">
-                    <i class="fa-solid fa-x"></i>
+                <div class="x-filteredlist cursor-pointer text-red-600 absolute top-0 right-0 w-8 h-8">
+                    <i class="fa-solid fa-x "></i>
                 </div>
                 <p class="font-bold text-black text-center">choose a worker</p>
             </div>
@@ -265,7 +265,7 @@ function checkWorkerRole(workerRole, selectedspace){
                 workerDiv.classList.add("selectedWorker", "w-full", "rounded-md", "bg-neutral-200/75", "p-2", "text-sm", "grid", "grid-cols-[15%,1fr]");
                 workerDiv.setAttribute("id", worker.id);
                 workerDiv.innerHTML = `
-                <img src="${worker.photo}" onerror="this.src='./src/images/profile.png'" class="profilephoto w-8 h-8 place-self-center rounded-full object-cover row-span-2">
+                <img src="${worker.photo}" onerror="this.src='./src/images/profile.png'" class="profilephoto cursor-pointer w-8 h-8 place-self-center rounded-full object-cover row-span-2">
                 <span class="font-bold col-start-2 row-start-1">${worker.name}</span>
                 <span class="col-start-2 row-start-2">${worker.role}</span>
                 `;
@@ -275,26 +275,27 @@ function checkWorkerRole(workerRole, selectedspace){
         const selectedWorkers = document.querySelectorAll(".selectedWorker");
         [...selectedWorkers].forEach(worker=>{
             worker.addEventListener("click", ()=>{
+                plusBtn.parentElement.classList.add("bg-teal-300/50");
                 [...USContainer.children].forEach(USworker => {
                     if(worker.id == USworker.id){
                         USworker.remove();
                         workers.forEach(WORKER =>{
                             if(WORKER.id == worker.id){
                                 WORKER.location = plusBtn.id;
-                                
                                 const clicked = document.createElement("div");
                                 clicked.className = "w-[30px] h-[30px] relative bg-neutral-500 rounded rounded-md";
                                 clicked.innerHTML = `
-                                <i class="x-profile fa-solid fa-right-to-bracket text-xs bg-white rounded text-red-600 absolute top-0 right-0 transform -translate-y-1/3"></i>
+                                <i class="x-profile fa-solid fa-right-to-bracket cursor-pointer text-xs bg-white rounded text-red-600 absolute top-0 right-0 transform -translate-y-1/3"></i>
                                 <img src="${WORKER.photo}" onerror="this.onerror=null; this.src='./src/images/profile.png';" class="profilephoto w-[30px] h-[30px] rounded-full object-cover">
                                 `;
                                 plusBtn.parentElement.append(clicked);
 
-
                                 const xProfile = clicked.querySelector(".x-profile");
                                 xProfile.addEventListener("click", ()=>{
-                                    clicked.remove();
                                     WORKER.location = "USstaffzone";
+                                    if(workers.every(w =>  w.location != plusBtn.id))
+                                        plusBtn.parentElement.classList.remove("bg-teal-300/50");
+                                    clicked.remove();
                                     appendworker(WORKER);
                                 })
                                 filteredlist.parentElement.remove();

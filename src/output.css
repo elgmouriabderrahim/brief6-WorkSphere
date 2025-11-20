@@ -839,6 +839,10 @@ video {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .resize-none {
   resize: none;
 }
@@ -1005,6 +1009,26 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
 }
 
+.bg-neutral-300\/50 {
+  background-color: rgb(212 212 212 / 0.5);
+}
+
+.bg-teal-200\/50 {
+  background-color: rgb(153 246 228 / 0.5);
+}
+
+.bg-teal-200\/30 {
+  background-color: rgb(153 246 228 / 0.3);
+}
+
+.bg-teal-300\/40 {
+  background-color: rgb(94 234 212 / 0.4);
+}
+
+.bg-teal-300\/0 {
+  background-color: rgb(94 234 212 / 0);
+}
+
 .object-cover {
   -o-object-fit: cover;
      object-fit: cover;
@@ -1150,6 +1174,11 @@ video {
 .hover\:bg-red-600:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(220 38 38 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:text-red-600:hover {
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity, 1));
 }
 
 @media (min-width: 768px) {
