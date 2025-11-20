@@ -90,46 +90,49 @@
     <main class="text-xs bg-green relative bg-neutral-300 h-auto p-2 rounded-md">
         <img src="./src/images/bgVertical.png" alt="background design" class="rounded-md md:hidden">
         <img src="./src/images/bgHorizontal.png" alt="background design" class="rounded-md hidden md:inline">
-        <div class="department absolute top-2 left-2 w-[calc(100%-16px)] h-[calc(100%-16px)] grid grid-cols-[2%,30.5%,1.5%,1.5%,29.5%,2%,31%,1%] grid-rows-[1%,21.5%,1%,21.5%,1%,15.3%,1%,36.5%,1%] justify-items-center md:grid-rows-[2%,31%,2%,29.5%,1.5%,1.5%,30.5%,2%] md:grid-cols-[1%,21.5%,1%,21%,0.5%,1%,15.3%,1%,36.5%,1%]">
 
-            <div class="SallePersonnel relative col-start-2 row-start-2 col-span-2 md:row-start-6 md:col-start-2 md:col-span-1 md:row-span-2 font-bold w-full text-center bg-green-300/50">
-                    <span>SallePersonnel</span>
-                    <button id="SallePersonnel" class="plusBtn bg-green-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md text-white border p-1">
+        <div class="department absolute top-2 left-2 w-[calc(100%-16px)] h-[calc(100%-16px)]
+         grid grid-cols-[2%,30.5%,1.5%,1.5%,29.5%,2%,31%,1%] grid-rows-[1%,21.5%,1%,21.5%,1%,15.3%,1%,36.5%,1%] 
+         justify-items-center md:grid-rows-[2%,31%,2%,29.5%,1.5%,1.5%,30.5%,2%] md:grid-cols-[1%,21.5%,1%,21%,0.5%,1%,15.3%,1%,36.5%,1%]">
+
+            <div class="SallePersonnel relative col-start-2 row-start-2 col-span-2 md:row-start-6 md:col-start-2 md:col-span-1 md:row-span-2 font-bold w-full text-center bg-green-300/50 flex justify-center items-center gap-x-2">
+                    <span class="absolute top-0 left-1/2 transform -translate-x-1/2">SallePersonnel</span>
+                    <button id="SallePersonnel" class="plusBtn bg-green-500 absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-full rounded-md text-white border p-1">
                         <i class="fa-solid fa-plus"></i>
                     </button>
             </div>
 
-            <div class="SalleServeurs relative col-start-7 row-start-2 md:col-start-2 md:row-start-2 font-bold w-full text-center bg-red-500/50">
-                    <span>SalleServeurs</span>
-                    <button id="SalleServeurs" class="plusBtn bg-green-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md text-white border p-1">
+            <div class="SalleServeurs relative col-start-7 row-start-2 md:col-start-2 md:row-start-2 font-bold w-full text-center bg-red-500/50 flex justify-center items-center gap-x-2">
+                    <span class="absolute top-0 left-1/2 transform -translate-x-1/2">SalleServeurs</span>
+                    <button id="SalleServeurs" class="plusBtn bg-green-500 absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-full rounded-md text-white border p-1">
                         <i class="fa-solid fa-plus"></i>
                     </button>
             </div>
 
-            <div class="SalleArchives relative col-start-2 row-start-4 col-span-2 md:col-start-4 md:row-start-6 md:row-span-2 font-bold w-full text-center bg-red-500/50">
-                    <span>SalleArchives</span>
-                    <button id="SalleArchives" class="plusBtn bg-green-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md text-white border p-1">
+            <div class="SalleArchives relative col-start-2 row-start-4 col-span-2 md:col-start-4 md:row-start-6 md:row-span-2 font-bold w-full text-center bg-red-500/50 flex justify-center items-center gap-x-2">
+                    <span class="absolute top-0 left-1/2 transform -translate-x-1/2">SalleArchives</span>
+                    <button id="SalleArchives" class="plusBtn bg-green-500 absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-full rounded-md text-white border p-1">
                         <i class="fa-solid fa-plus"></i>
                     </button>
             </div>
 
-            <div class="SalleSecurite relative col-start-7 row-start-4 md:col-start-4 md:row-start-2 font-bold w-full text-center bg-red-500/50">
-                    <span>SalleSecurite</span>
-                    <button id="SalleSecurite" class="plusBtn bg-green-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md text-white border p-1">
+            <div class="SalleSecurite relative col-start-7 row-start-4 md:col-start-4 md:row-start-2 font-bold w-full text-center bg-red-500/50 flex justify-center items-center gap-x-2">
+                    <span class="absolute top-0 left-1/2 transform -translate-x-1/2">SalleSecurite</span>
+                    <button id="SalleSecurite" class="plusBtn bg-green-500 absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-full rounded-md text-white border p-1">
                         <i class="fa-solid fa-plus"></i>
                     </button>
             </div>
 
-            <div class="SalleConference relative col-start-2 row-start-8 md:col-start-9 md:row-start-7 font-bold w-full text-center bg-teal-300/50">
-                    <span>SalleConference</span>
-                    <button id="SalleConference" class="plusBtn bg-green-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md text-white border p-1">
+            <div class="SalleConference relative col-start-2 row-start-8 md:col-start-9 md:row-start-7 font-bold w-full text-center bg-teal-300/50 flex justify-center items-center gap-x-2">
+                    <span class="absolute top-0 left-1/2 transform -translate-x-1/2">SalleConference</span>
+                    <button id="SalleConference" class="plusBtn bg-green-500 absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-full rounded-md text-white border p-1">
                         <i class="fa-solid fa-plus"></i>
                     </button>
             </div>
 
-            <div class="Reception relative col-start-4 col-span-4 row-start-8 md:col-start-9 md:row-start-2 md:row-span-4  md:col-span-1 font-bold w-full text-center bg-red-500/50">
-                    <span>Reception</span>
-                    <button id="Reception" class="plusBtn bg-green-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md text-white border p-1">
+            <div class="Reception relative col-start-4 col-span-4 row-start-8 md:col-start-9 md:row-start-2 md:row-span-4  md:col-span-1 font-bold w-full text-center bg-red-500/50 flex justify-center items-center gap-x-2">
+                    <span class="absolute top-0 left-1/2 transform -translate-x-1/2">Reception</span>
+                    <button id="Reception" class="plusBtn bg-green-500 absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-full rounded-md text-white border p-1">
                         <i class="fa-solid fa-plus"></i>
                     </button>
             </div>

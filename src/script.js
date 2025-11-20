@@ -157,28 +157,16 @@ saveBtn.addEventListener("click", () => {
             email: Email.value,
             phoneNumber: PhoneNumber.value,
             photo: Photo.value,
-            experiences: []
+            experiences: [],
+            location: "USstaffzone"
         }
         newWorker.experiences = experiencestemp;
         workers.push(newWorker);
 
-        const newWorkerDiv = document.createElement("div");
-        newWorkerDiv.classList.add("w-full", "rounded-md", "bg-neutral-200/75", "p-2", "text-sm", "grid", "grid-cols-[15%,1fr]");
-        newWorkerDiv.innerHTML = `
-        <img src="${newWorker.photo}" onerror="this.src='./src/images/profile.png'" class="profilephoto w-8 h-8 place-self-center rounded-full object-cover row-span-2">
-        <span class="font-bold col-start-2 row-start-1">${newWorker.name}</span>
-        <span class="col-start-2 row-start-2">${newWorker.role}</span>
-        <i class="fa-solid fa-trash deleteWorkerBtn text-red-500 w-full text-end col-start-3 justify-self-end"></i>
-        `;
-        USContainer.append(newWorkerDiv);
-        const deleteWorkerBtn = newWorkerDiv.querySelector(".deleteWorkerBtn");
-        deleteWorkerBtn.addEventListener("click", () => {
-            workers = workers.filter(worker => worker.id != newWorker.id);
-            newWorkerDiv.remove();
-        })
+        appendworker(newWorker);
+        
 
         Experiences.innerHTML = "";
-
         Name.value = "";
         Email.value = "";
         PhoneNumber.value = "";
@@ -187,6 +175,25 @@ saveBtn.addEventListener("click", () => {
         previmage.src = "./src/images/profile.png";
     }
 })
+
+function appendworker(newWorker){
+    const newWorkerDiv = document.createElement("div");
+    newWorkerDiv.classList.add("w-full", "rounded-md", "bg-neutral-200/75", "p-2", "text-sm", "grid", "grid-cols-[15%,1fr]");
+    newWorkerDiv.setAttribute("id", newWorker.id)
+    newWorkerDiv.innerHTML = `
+    <img src="${newWorker.photo}" onerror="this.src='./src/images/profile.png'" class="profilephoto w-8 h-8 place-self-center rounded-full object-cover row-span-2">
+    <span class="font-bold col-start-2 row-start-1">${newWorker.name}</span>
+    <span class="col-start-2 row-start-2">${newWorker.role}</span>
+    <i class="fa-solid fa-trash deleteWorkerBtn text-red-500 w-full text-end col-start-3 justify-self-end"></i>
+    `;
+    USContainer.append(newWorkerDiv);
+    const deleteWorkerBtn = newWorkerDiv.querySelector(".deleteWorkerBtn");
+    deleteWorkerBtn.addEventListener("click", () => {
+        workers = workers.filter(worker => worker.id != newWorker.id);
+        newWorkerDiv.remove();
+    })
+}
+
 
 AddExp.addEventListener("click", () => {
     const experience = document.createElement("div");
@@ -253,9 +260,10 @@ function checkWorkerRole(workerRole, selectedspace){
             filteredlist.parentElement.remove();
         })
         workers.forEach(worker =>{
-            if(checkWorkerRole(worker.role, plusBtn.getAttribute("id"))){
+            if(checkWorkerRole(worker.role, plusBtn.getAttribute("id")) && worker.location == "USstaffzone"){
                 const workerDiv = document.createElement("div");
-                workerDiv.classList.add("w-full", "rounded-md", "bg-neutral-200/75", "p-2", "text-sm", "grid", "grid-cols-[15%,1fr]");
+                workerDiv.classList.add("selectedWorker", "w-full", "rounded-md", "bg-neutral-200/75", "p-2", "text-sm", "grid", "grid-cols-[15%,1fr]");
+                workerDiv.setAttribute("id", worker.id);
                 workerDiv.innerHTML = `
                 <img src="${worker.photo}" onerror="this.src='./src/images/profile.png'" class="profilephoto w-8 h-8 place-self-center rounded-full object-cover row-span-2">
                 <span class="font-bold col-start-2 row-start-1">${worker.name}</span>
@@ -264,6 +272,39 @@ function checkWorkerRole(workerRole, selectedspace){
                 filteredlist.append(workerDiv);
             }
         })
+        const selectedWorkers = document.querySelectorAll(".selectedWorker");
+        [...selectedWorkers].forEach(worker=>{
+            worker.addEventListener("click", ()=>{
+                [...USContainer.children].forEach(USworker => {
+                    if(worker.id == USworker.id){
+                        USworker.remove();
+                        workers.forEach(WORKER =>{
+                            if(WORKER.id == worker.id){
+                                WORKER.location = plusBtn.id;
+                                
+                                const clicked = document.createElement("div");
+                                clicked.className = "w-[30px] h-[30px] relative bg-neutral-500 rounded rounded-md";
+                                clicked.innerHTML = `
+                                <i class="x-profile fa-solid fa-right-to-bracket text-xs bg-white rounded text-red-600 absolute top-0 right-0 transform -translate-y-1/3"></i>
+                                <img src="${WORKER.photo}" onerror="this.onerror=null; this.src='./src/images/profile.png';" class="profilephoto w-[30px] h-[30px] rounded-full object-cover">
+                                `;
+                                plusBtn.parentElement.append(clicked);
+
+
+                                const xProfile = clicked.querySelector(".x-profile");
+                                xProfile.addEventListener("click", ()=>{
+                                    clicked.remove();
+                                    WORKER.location = "USstaffzone";
+                                    appendworker(WORKER);
+                                })
+                                filteredlist.parentElement.remove();
+                            }
+                        })
+                    }
+                })
+            })
+        })
+
 
     })
 })
