@@ -247,7 +247,7 @@ function checkWorkerRole(workerRole, selectedspace){
         const pop = document.createElement("div");
         pop.className = "pop inset-0 bg-black/50 backdrop-blur-md absolute grid place-items-center z-50";
         pop.innerHTML = `
-            <div class="filteredlist relative flex flex-col gap-2 w-[300px] p-2 h-[70vh] overflow-y-auto bg-white rounded-md">
+            <div class="filteredlist relative flex flex-col gap-2 w-full md:w-[400px] p-2 h-[70vh] overflow-y-auto bg-white rounded-md">
                 <div class="x-filteredlist cursor-pointer text-red-600 absolute top-0 right-0 w-8 h-8">
                     <i class="fa-solid fa-x "></i>
                 </div>
@@ -334,68 +334,80 @@ function listen(profilephoto){
 
 function descriptionPopUp(worker) {
     const pop = document.createElement("div");
-    pop.className = "inset-0 bg-black/50 backdrop-blur-md fixed place-items-center z-50 p-4";
+    pop.className = "inset-0 bg-black/50 backdrop-blur-md fixed grid place-items-center z-50 p-4";
 
     const content = document.createElement("div");
-    content.className = "bg-white rounded-lg shadow-lg p-4 max-w-xs w-full text-center relative";
+    content.className = "bg-white rounded-lg shadow-lg p-4 w-full h-[90vh] md:w-2/3 lg:w-1/2 relative grid grid-cols-[1fr,2fr] overflow-y-auto";
 
     const closeBtn = document.createElement("button");
-    closeBtn.innerHTML = "&times;";
-    closeBtn.className = "absolute top-0 right-0 text-lg font-bold text-gray-600 hover:text-red-600";
+    closeBtn.innerHTML = `<i class="fa-solid fa-x"></i>`;
+    closeBtn.className = "absolute top-0 right-0 font-bold text-red-500 hover:text-red-600";
     closeBtn.addEventListener("click", () => pop.remove());
 
     const img = document.createElement("img");
     img.src = worker.photo;
     img.onerror = () => img.src = "./src/images/profile.png";
-    img.className = "profilephoto w-full aspect-square object-cover rounded-md mb-4";
+    img.className = "profilephoto w-2/3 aspect-square object-cover border border-black border-2 rounded-md mb-4 col-span-2 justify-self-center";
 
+    const namelabel = document.createElement("p");
+    namelabel.classList = "font-bold";
+    namelabel.innerText = "Name:";
     const name = document.createElement("p");
-    name.className = "font-bold text-black text-center";
-    name.textContent = `Name: ${worker.name}`;
+    name.textContent = worker.name;
 
+    const rolelabel = document.createElement("p");
+    rolelabel.innerText = "Role:";
     const role = document.createElement("p");
-    role.className = "font-bold text-black text-center";
-    role.textContent = `Role: ${worker.role}`;
+    role.textContent = worker.role;
     
+    const phonelabel = document.createElement("p");
+    phonelabel.innerText = "Phone Number: ";
     const phone = document.createElement("p");
-    phone.className = "font-bold text-black text-center";
-    phone.textContent = `phone Number: ${worker.phoneNumber}`;
+    phone.textContent = worker.phoneNumber;
     
+    const emaillabel = document.createElement("p");
+    emaillabel.innerText = "Email: ";
     const email = document.createElement("p");
-    email.className = "font-bold text-black text-center";
-    email.textContent = `Email: ${worker.email}`;
+    email.textContent = worker.email;
     
+    const localisationlabel = document.createElement("p");
+    localisationlabel.innerText = "Actual zone: ";
     const localisation = document.createElement("p");
-    localisation.className = "font-bold text-black text-center";
-    localisation.textContent = `Zone actuelle: ${worker.localisation}`;
+    localisation.textContent = worker.location;
 
 
 
     const expContainer = document.createElement("div");
-    expContainer.innerHTML = "<p>Les Experiences</p>";
+    if(worker.experiences.length > 0){
+        expContainer.className = " col-span-2";
+        expContainer.innerHTML = `<p class="font-bold underline text-center">Les Experiences</p>`;
+    
+        worker.experiences.forEach(exp =>{
+            const expDiv = document.createElement("div");
+            expDiv.className = "border p-2 rounded-md bg-gray-50";
+    
+            const post = document.createElement("p");
+            post.className = "font-semibold text-gray-800";
+            post.textContent = `Post: ${exp.expTitle}`;
+    
+            const dates = document.createElement("p");
+            dates.className = "text-gray-600 text-sm";
+            dates.textContent = `From ${exp.expStart} to ${exp.expEnd}`;
+    
+            const expDesc = document.createElement("p");
+            expDesc.className = "text-gray-700 text-sm";
+            if(exp.expDesc == "")
+                expDesc.innerHTML = `Description :<br/>No description available`;
+            else
+                expDesc.innerHTML = `Description :<br/>${exp.expDesc}`;
 
-    worker.experiences.forEach(exp =>{
-        const expDiv = document.createElement("div");
-        expDiv.className = "border p-2 rounded-md bg-gray-50";
-
-        const post = document.createElement("p");
-        post.className = "font-semibold text-gray-800";
-        post.textContent = `Post: ${exp.expTitle}`;
-
-        const dates = document.createElement("p");
-        dates.className = "text-gray-600 text-sm";
-        dates.textContent = `From ${exp.expStart} to ${exp.expEnd}`;
-
-        const expDesc = document.createElement("p");
-        expDesc.className = "text-gray-700 text-sm";
-        expDesc.textContent = exp.expDesc || "No description available";
-
-        expDiv.append(post, dates, expDesc);
-        expContainer.appendChild(expDiv);
-    })
+            expDiv.append(post, dates, expDesc);
+            expContainer.appendChild(expDiv);
+        })
+    }
 
 
-    content.append(closeBtn, img, name, role, phone, email,localisation, expContainer);
+    content.append(closeBtn, img, namelabel, name, rolelabel, role, phonelabel, phone, emaillabel,  email, localisationlabel, localisation, expContainer);
     pop.appendChild(content);
 
     pop.addEventListener("click", (e) => {
