@@ -24,7 +24,6 @@ const Experiences = document.getElementById("experiences");
 
 const previmage = document.querySelector(".previmage")
 
-let workers = [];
 let datecheck;
 let experiencestemp = [];
 
@@ -78,7 +77,10 @@ const limitation = {
         nbr: 0,
         limit: 3
     }
-}
+};
+
+let workers = JSON.parse(localStorage.getItem("workers")||"[]");
+workers.forEach(worker => appendworkerAsUS(worker));
 
 menu.addEventListener("click", () => {
     aside.classList.remove("translate-x-full");
@@ -187,12 +189,14 @@ saveBtn.addEventListener("click", () => {
             phoneNumber: PhoneNumber.value,
             photo: Photo.value,
             experiences: [],
-            location: "USstaffzone"
         }
         newWorker.experiences = experiencestemp;
         workers.push(newWorker);
+        console.log("pushed")
+        console.log(workers)
+        localStorage.setItem("workers", JSON.stringify(workers));
 
-        appendworker(newWorker);
+        appendworkerAsUS(newWorker);
         
 
         Experiences.innerHTML = "";
@@ -205,7 +209,7 @@ saveBtn.addEventListener("click", () => {
     }
 })
 
-function appendworker(newWorker){
+function appendworkerAsUS(newWorker){
     const newWorkerDiv = document.createElement("div");
     newWorkerDiv.classList.add("w-full", "rounded-md", "bg-neutral-200/75", "p-2", "text-sm", "grid", "grid-cols-[15%,1fr]");
     newWorkerDiv.setAttribute("id", newWorker.id);
@@ -215,6 +219,7 @@ function appendworker(newWorker){
     <span class="col-start-2 row-start-2">${newWorker.role}</span>
     <i class="fa-solid fa-trash deleteWorkerBtn cursor-pointer hover:text-red-600 text-red-500 w-full text-end col-start-3 justify-self-end"></i>
     `;
+    newWorker.location = "USstaffzone";
     USContainer.append(newWorkerDiv);
 
     const profilephoto = newWorkerDiv.querySelector(".profilephoto");
@@ -223,6 +228,7 @@ function appendworker(newWorker){
     const deleteWorkerBtn = newWorkerDiv.querySelector(".deleteWorkerBtn");
     deleteWorkerBtn.addEventListener("click", () => {
         workers = workers.filter(worker => worker.id != newWorker.id);
+        localStorage.setItem("workers", JSON.stringify(workers));
         newWorkerDiv.remove();
     })
 }
@@ -338,11 +344,10 @@ function checkWorkerRole(workerRole, selectedspace){
                                     const xProfile = clicked.querySelector(".x-profile");
                                     xProfile.addEventListener("click", ()=>{
                                         limitation[plusBtn.id].nbr--;
-                                        WORKER.location = "USstaffzone";
                                         if(workers.every(w =>  w.location != plusBtn.id))
                                             plusBtn.parentElement.classList.remove("bg-teal-300/50");
                                         clicked.remove();
-                                        appendworker(WORKER);
+                                        appendworkerAsUS(WORKER);
                                     })
                                     filteredlist.parentElement.remove();
                                 }
