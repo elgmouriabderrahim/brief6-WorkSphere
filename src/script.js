@@ -51,6 +51,35 @@ const roleLimits = {
     Nettoyage: ['SalleConference','Reception','SalleServeurs','SalleSecurite','SallePersonnel'],
     Autres: ['SalleConference', 'SallePersonnel', 'SalleArchives']
 };
+
+
+const limitation = {
+    SalleConference:{
+        nbr: 0,
+        limit: 10
+    },
+    Reception:{
+        nbr: 0,
+        limit: 5
+    },
+    SallePersonnel:{
+        nbr: 0,
+        limit: 5
+    },
+    SalleArchives:{
+        nbr: 0,
+        limit: 3
+    },
+    SalleServeurs:{
+        nbr: 0,
+        limit: 3
+    },
+    SalleSecurite:{
+        nbr: 0,
+        limit: 3
+    }
+}
+
 menu.addEventListener("click", () => {
     aside.classList.remove("translate-x-full");
 })
@@ -179,7 +208,7 @@ saveBtn.addEventListener("click", () => {
 function appendworker(newWorker){
     const newWorkerDiv = document.createElement("div");
     newWorkerDiv.classList.add("w-full", "rounded-md", "bg-neutral-200/75", "p-2", "text-sm", "grid", "grid-cols-[15%,1fr]");
-    newWorkerDiv.setAttribute("id", newWorker.id)
+    newWorkerDiv.setAttribute("id", newWorker.id);
     newWorkerDiv.innerHTML = `
     <img src="${newWorker.photo}" onerror="this.src='./src/images/profile.png'" class="profilephoto w-8 h-8 place-self-center rounded-full object-cover row-span-2">
     <span class="font-bold col-start-2 row-start-1">${newWorker.name}</span>
@@ -187,6 +216,10 @@ function appendworker(newWorker){
     <i class="fa-solid fa-trash deleteWorkerBtn cursor-pointer hover:text-red-600 text-red-500 w-full text-end col-start-3 justify-self-end"></i>
     `;
     USContainer.append(newWorkerDiv);
+
+    const profilephoto = newWorkerDiv.querySelector(".profilephoto");
+    listen(profilephoto);
+
     const deleteWorkerBtn = newWorkerDiv.querySelector(".deleteWorkerBtn");
     deleteWorkerBtn.addEventListener("click", () => {
         workers = workers.filter(worker => worker.id != newWorker.id);
@@ -243,7 +276,7 @@ function checkWorkerRole(workerRole, selectedspace){
         const pop = document.createElement("div");
         pop.className = "pop inset-0 bg-black/50 backdrop-blur-md absolute grid place-items-center z-50";
         pop.innerHTML = `
-            <div class="filteredlist relative flex flex-col gap-2 w-[300px] p-2 h-[70vh] overflow-y-auto bg-white rounded-md">
+            <div class="filteredlist relative flex flex-col gap-2 w-full md:w-[400px] p-2 h-[70vh] overflow-y-auto bg-white rounded-md">
                 <div class="x-filteredlist cursor-pointer text-red-600 absolute top-0 right-0 w-8 h-8">
                     <i class="fa-solid fa-x "></i>
                 </div>
@@ -270,42 +303,153 @@ function checkWorkerRole(workerRole, selectedspace){
                 <span class="col-start-2 row-start-2">${worker.role}</span>
                 `;
                 filteredlist.append(workerDiv);
+
+                const profilephoto = workerDiv.querySelector(".profilephoto");
+                listen(profilephoto);
             }
         })
         const selectedWorkers = document.querySelectorAll(".selectedWorker");
         [...selectedWorkers].forEach(worker=>{
             worker.addEventListener("click", ()=>{
-                plusBtn.parentElement.classList.add("bg-teal-300/50");
-                [...USContainer.children].forEach(USworker => {
-                    if(worker.id == USworker.id){
-                        USworker.remove();
-                        workers.forEach(WORKER =>{
-                            if(WORKER.id == worker.id){
-                                WORKER.location = plusBtn.id;
-                                const clicked = document.createElement("div");
-                                clicked.className = "w-[30px] h-[30px] relative bg-neutral-500 rounded rounded-md";
-                                clicked.innerHTML = `
-                                <i class="x-profile fa-solid fa-right-to-bracket cursor-pointer text-xs bg-white rounded text-red-600 absolute top-0 right-0 transform -translate-y-1/3"></i>
-                                <img src="${WORKER.photo}" onerror="this.onerror=null; this.src='./src/images/profile.png';" class="profilephoto w-[30px] h-[30px] rounded-full object-cover">
-                                `;
-                                plusBtn.parentElement.append(clicked);
+                if(limitation[plusBtn.id].nbr == limitation[plusBtn.id].limit){
+                    alert("the space is full");
+                }else{
+                    limitation[plusBtn.id].nbr++;
 
-                                const xProfile = clicked.querySelector(".x-profile");
-                                xProfile.addEventListener("click", ()=>{
-                                    WORKER.location = "USstaffzone";
-                                    if(workers.every(w =>  w.location != plusBtn.id))
-                                        plusBtn.parentElement.classList.remove("bg-teal-300/50");
-                                    clicked.remove();
-                                    appendworker(WORKER);
-                                })
-                                filteredlist.parentElement.remove();
-                            }
-                        })
-                    }
-                })
+                    plusBtn.parentElement.classList.add("bg-teal-300/50");
+                    [...USContainer.children].forEach(USworker => {
+                        if(worker.id == USworker.id){
+                            USworker.remove();
+                            workers.forEach(WORKER =>{
+                                if(WORKER.id == worker.id){
+                                    WORKER.location = plusBtn.id;
+                                    const clicked = document.createElement("div");
+                                    clicked.className = "w-[30px] h-[30px] relative bg-neutral-500 rounded rounded-md";
+                                    clicked.setAttribute("id", WORKER.id);
+                                    clicked.innerHTML = `
+                                    <i class="x-profile fa-solid fa-right-to-bracket cursor-pointer text-xs bg-white rounded text-red-600 absolute top-0 right-0 transform -translate-y-1/3"></i>
+                                    <img src="${WORKER.photo}" onerror="this.onerror=null; this.src='./src/images/profile.png';" class="profilephoto w-[30px] h-[30px] rounded-full object-cover">
+                                    `;
+                                    plusBtn.parentElement.append(clicked);
+    
+                                    const profilephoto = clicked.querySelector(".profilephoto");
+                                    listen(profilephoto);
+    
+                                    const xProfile = clicked.querySelector(".x-profile");
+                                    xProfile.addEventListener("click", ()=>{
+                                        limitation[plusBtn.id].nbr--;
+                                        WORKER.location = "USstaffzone";
+                                        if(workers.every(w =>  w.location != plusBtn.id))
+                                            plusBtn.parentElement.classList.remove("bg-teal-300/50");
+                                        clicked.remove();
+                                        appendworker(WORKER);
+                                    })
+                                    filteredlist.parentElement.remove();
+                                }
+                            })
+                        }
+                    })
+                }
             })
         })
 
 
     })
 })
+
+function listen(profilephoto){
+    profilephoto.addEventListener("click", ()=>{
+        workers.forEach(worker => {
+            if(profilephoto.parentElement.id == worker.id)
+                descriptionPopUp(worker);
+        })
+    
+    })
+}
+
+
+function descriptionPopUp(worker) {
+    const pop = document.createElement("div");
+    pop.className = "inset-0 bg-black/50 backdrop-blur-md fixed grid place-items-center z-50 p-4";
+
+    const content = document.createElement("div");
+    content.className = "bg-white rounded-lg shadow-lg p-4 w-full h-[90vh] md:w-2/3 lg:w-1/2 relative grid grid-cols-[1fr,2fr] overflow-y-auto";
+
+    const closeBtn = document.createElement("button");
+    closeBtn.innerHTML = `<i class="fa-solid fa-x"></i>`;
+    closeBtn.className = "absolute top-0 right-0 font-bold text-red-500 hover:text-red-600";
+    closeBtn.addEventListener("click", () => pop.remove());
+
+    const img = document.createElement("img");
+    img.src = worker.photo;
+    img.onerror = () => img.src = "./src/images/profile.png";
+    img.className = "profilephoto w-2/3 aspect-square object-cover border border-black border-2 rounded-md mb-4 col-span-2 justify-self-center";
+
+    const namelabel = document.createElement("p");
+    namelabel.classList = "font-bold";
+    namelabel.innerText = "Name:";
+    const name = document.createElement("p");
+    name.textContent = worker.name;
+
+    const rolelabel = document.createElement("p");
+    rolelabel.innerText = "Role:";
+    const role = document.createElement("p");
+    role.textContent = worker.role;
+    
+    const phonelabel = document.createElement("p");
+    phonelabel.innerText = "Phone Number: ";
+    const phone = document.createElement("p");
+    phone.textContent = worker.phoneNumber;
+    
+    const emaillabel = document.createElement("p");
+    emaillabel.innerText = "Email: ";
+    const email = document.createElement("p");
+    email.textContent = worker.email;
+    
+    const localisationlabel = document.createElement("p");
+    localisationlabel.innerText = "Actual zone: ";
+    const localisation = document.createElement("p");
+    localisation.textContent = worker.location;
+
+
+
+    const expContainer = document.createElement("div");
+    if(worker.experiences.length > 0){
+        expContainer.className = " col-span-2";
+        expContainer.innerHTML = `<p class="font-bold underline text-center">Les Experiences</p>`;
+    
+        worker.experiences.forEach(exp =>{
+            const expDiv = document.createElement("div");
+            expDiv.className = "border p-2 rounded-md bg-gray-50";
+    
+            const post = document.createElement("p");
+            post.className = "font-semibold text-gray-800";
+            post.textContent = `Post: ${exp.expTitle}`;
+    
+            const dates = document.createElement("p");
+            dates.className = "text-gray-600 text-sm";
+            dates.textContent = `From ${exp.expStart} to ${exp.expEnd}`;
+    
+            const expDesc = document.createElement("p");
+            expDesc.className = "text-gray-700 text-sm";
+            if(exp.expDesc == "")
+                expDesc.innerHTML = `Description :<br/>No description available`;
+            else
+                expDesc.innerHTML = `Description :<br/>${exp.expDesc}`;
+
+            expDiv.append(post, dates, expDesc);
+            expContainer.appendChild(expDiv);
+        })
+    }
+
+
+    content.append(closeBtn, img, namelabel, name, rolelabel, role, phonelabel, phone, emaillabel,  email, localisationlabel, localisation, expContainer);
+    pop.appendChild(content);
+
+    pop.addEventListener("click", (e) => {
+        if (e.target === pop) pop.remove();
+    });
+
+    document.body.appendChild(pop);
+}
+
