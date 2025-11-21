@@ -51,6 +51,35 @@ const roleLimits = {
     Nettoyage: ['SalleConference','Reception','SalleServeurs','SalleSecurite','SallePersonnel'],
     Autres: ['SalleConference', 'SallePersonnel', 'SalleArchives']
 };
+
+
+const limitation = {
+    SalleConference:{
+        nbr: 0,
+        limit: 10
+    },
+    Reception:{
+        nbr: 0,
+        limit: 5
+    },
+    SallePersonnel:{
+        nbr: 0,
+        limit: 5
+    },
+    SalleArchives:{
+        nbr: 0,
+        limit: 3
+    },
+    SalleServeurs:{
+        nbr: 0,
+        limit: 3
+    },
+    SalleSecurite:{
+        nbr: 0,
+        limit: 3
+    }
+}
+
 menu.addEventListener("click", () => {
     aside.classList.remove("translate-x-full");
 })
@@ -282,38 +311,45 @@ function checkWorkerRole(workerRole, selectedspace){
         const selectedWorkers = document.querySelectorAll(".selectedWorker");
         [...selectedWorkers].forEach(worker=>{
             worker.addEventListener("click", ()=>{
-                plusBtn.parentElement.classList.add("bg-teal-300/50");
-                [...USContainer.children].forEach(USworker => {
-                    if(worker.id == USworker.id){
-                        USworker.remove();
-                        workers.forEach(WORKER =>{
-                            if(WORKER.id == worker.id){
-                                WORKER.location = plusBtn.id;
-                                const clicked = document.createElement("div");
-                                clicked.className = "w-[30px] h-[30px] relative bg-neutral-500 rounded rounded-md";
-                                clicked.setAttribute("id", WORKER.id);
-                                clicked.innerHTML = `
-                                <i class="x-profile fa-solid fa-right-to-bracket cursor-pointer text-xs bg-white rounded text-red-600 absolute top-0 right-0 transform -translate-y-1/3"></i>
-                                <img src="${WORKER.photo}" onerror="this.onerror=null; this.src='./src/images/profile.png';" class="profilephoto w-[30px] h-[30px] rounded-full object-cover">
-                                `;
-                                plusBtn.parentElement.append(clicked);
+                if(limitation[plusBtn.id].nbr == limitation[plusBtn.id].limit){
+                    alert("the space is full");
+                }else{
+                    limitation[plusBtn.id].nbr++;
 
-                                const profilephoto = clicked.querySelector(".profilephoto");
-                                listen(profilephoto);
-
-                                const xProfile = clicked.querySelector(".x-profile");
-                                xProfile.addEventListener("click", ()=>{
-                                    WORKER.location = "USstaffzone";
-                                    if(workers.every(w =>  w.location != plusBtn.id))
-                                        plusBtn.parentElement.classList.remove("bg-teal-300/50");
-                                    clicked.remove();
-                                    appendworker(WORKER);
-                                })
-                                filteredlist.parentElement.remove();
-                            }
-                        })
-                    }
-                })
+                    plusBtn.parentElement.classList.add("bg-teal-300/50");
+                    [...USContainer.children].forEach(USworker => {
+                        if(worker.id == USworker.id){
+                            USworker.remove();
+                            workers.forEach(WORKER =>{
+                                if(WORKER.id == worker.id){
+                                    WORKER.location = plusBtn.id;
+                                    const clicked = document.createElement("div");
+                                    clicked.className = "w-[30px] h-[30px] relative bg-neutral-500 rounded rounded-md";
+                                    clicked.setAttribute("id", WORKER.id);
+                                    clicked.innerHTML = `
+                                    <i class="x-profile fa-solid fa-right-to-bracket cursor-pointer text-xs bg-white rounded text-red-600 absolute top-0 right-0 transform -translate-y-1/3"></i>
+                                    <img src="${WORKER.photo}" onerror="this.onerror=null; this.src='./src/images/profile.png';" class="profilephoto w-[30px] h-[30px] rounded-full object-cover">
+                                    `;
+                                    plusBtn.parentElement.append(clicked);
+    
+                                    const profilephoto = clicked.querySelector(".profilephoto");
+                                    listen(profilephoto);
+    
+                                    const xProfile = clicked.querySelector(".x-profile");
+                                    xProfile.addEventListener("click", ()=>{
+                                        limitation[plusBtn.id].nbr--;
+                                        WORKER.location = "USstaffzone";
+                                        if(workers.every(w =>  w.location != plusBtn.id))
+                                            plusBtn.parentElement.classList.remove("bg-teal-300/50");
+                                        clicked.remove();
+                                        appendworker(WORKER);
+                                    })
+                                    filteredlist.parentElement.remove();
+                                }
+                            })
+                        }
+                    })
+                }
             })
         })
 
@@ -416,3 +452,4 @@ function descriptionPopUp(worker) {
 
     document.body.appendChild(pop);
 }
+
