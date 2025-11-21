@@ -179,7 +179,7 @@ saveBtn.addEventListener("click", () => {
 function appendworker(newWorker){
     const newWorkerDiv = document.createElement("div");
     newWorkerDiv.classList.add("w-full", "rounded-md", "bg-neutral-200/75", "p-2", "text-sm", "grid", "grid-cols-[15%,1fr]");
-    newWorkerDiv.setAttribute("id", newWorker.id)
+    newWorkerDiv.setAttribute("id", newWorker.id);
     newWorkerDiv.innerHTML = `
     <img src="${newWorker.photo}" onerror="this.src='./src/images/profile.png'" class="profilephoto w-8 h-8 place-self-center rounded-full object-cover row-span-2">
     <span class="font-bold col-start-2 row-start-1">${newWorker.name}</span>
@@ -187,6 +187,10 @@ function appendworker(newWorker){
     <i class="fa-solid fa-trash deleteWorkerBtn cursor-pointer hover:text-red-600 text-red-500 w-full text-end col-start-3 justify-self-end"></i>
     `;
     USContainer.append(newWorkerDiv);
+
+    const profilephoto = newWorkerDiv.querySelector(".profilephoto");
+    listen(profilephoto);
+
     const deleteWorkerBtn = newWorkerDiv.querySelector(".deleteWorkerBtn");
     deleteWorkerBtn.addEventListener("click", () => {
         workers = workers.filter(worker => worker.id != newWorker.id);
@@ -270,6 +274,9 @@ function checkWorkerRole(workerRole, selectedspace){
                 <span class="col-start-2 row-start-2">${worker.role}</span>
                 `;
                 filteredlist.append(workerDiv);
+
+                const profilephoto = workerDiv.querySelector(".profilephoto");
+                listen(profilephoto);
             }
         })
         const selectedWorkers = document.querySelectorAll(".selectedWorker");
@@ -284,11 +291,15 @@ function checkWorkerRole(workerRole, selectedspace){
                                 WORKER.location = plusBtn.id;
                                 const clicked = document.createElement("div");
                                 clicked.className = "w-[30px] h-[30px] relative bg-neutral-500 rounded rounded-md";
+                                clicked.setAttribute("id", WORKER.id);
                                 clicked.innerHTML = `
                                 <i class="x-profile fa-solid fa-right-to-bracket cursor-pointer text-xs bg-white rounded text-red-600 absolute top-0 right-0 transform -translate-y-1/3"></i>
                                 <img src="${WORKER.photo}" onerror="this.onerror=null; this.src='./src/images/profile.png';" class="profilephoto w-[30px] h-[30px] rounded-full object-cover">
                                 `;
                                 plusBtn.parentElement.append(clicked);
+
+                                const profilephoto = clicked.querySelector(".profilephoto");
+                                listen(profilephoto);
 
                                 const xProfile = clicked.querySelector(".x-profile");
                                 xProfile.addEventListener("click", ()=>{
@@ -309,3 +320,87 @@ function checkWorkerRole(workerRole, selectedspace){
 
     })
 })
+
+function listen(profilephoto){
+    profilephoto.addEventListener("click", ()=>{
+        workers.forEach(worker => {
+            if(profilephoto.parentElement.id == worker.id)
+                descriptionPopUp(worker);
+        })
+    
+    })
+}
+
+
+function descriptionPopUp(worker) {
+    const pop = document.createElement("div");
+    pop.className = "inset-0 bg-black/50 backdrop-blur-md fixed place-items-center z-50 p-4";
+
+    const content = document.createElement("div");
+    content.className = "bg-white rounded-lg shadow-lg p-4 max-w-xs w-full text-center relative";
+
+    const closeBtn = document.createElement("button");
+    closeBtn.innerHTML = "&times;";
+    closeBtn.className = "absolute top-0 right-0 text-lg font-bold text-gray-600 hover:text-red-600";
+    closeBtn.addEventListener("click", () => pop.remove());
+
+    const img = document.createElement("img");
+    img.src = worker.photo;
+    img.onerror = () => img.src = "./src/images/profile.png";
+    img.className = "profilephoto w-full aspect-square object-cover rounded-md mb-4";
+
+    const name = document.createElement("p");
+    name.className = "font-bold text-black text-center";
+    name.textContent = `Name: ${worker.name}`;
+
+    const role = document.createElement("p");
+    role.className = "font-bold text-black text-center";
+    role.textContent = `Role: ${worker.role}`;
+    
+    const phone = document.createElement("p");
+    phone.className = "font-bold text-black text-center";
+    phone.textContent = `phone Number: ${worker.phoneNumber}`;
+    
+    const email = document.createElement("p");
+    email.className = "font-bold text-black text-center";
+    email.textContent = `Email: ${worker.email}`;
+    
+    const localisation = document.createElement("p");
+    localisation.className = "font-bold text-black text-center";
+    localisation.textContent = `Zone actuelle: ${worker.localisation}`;
+
+
+
+    const expContainer = document.createElement("div");
+    expContainer.innerHTML = "<p>Les Experiences</p>";
+
+    worker.experiences.forEach(exp =>{
+        const expDiv = document.createElement("div");
+        expDiv.className = "border p-2 rounded-md bg-gray-50";
+
+        const post = document.createElement("p");
+        post.className = "font-semibold text-gray-800";
+        post.textContent = `Post: ${exp.expTitle}`;
+
+        const dates = document.createElement("p");
+        dates.className = "text-gray-600 text-sm";
+        dates.textContent = `From ${exp.expStart} to ${exp.expEnd}`;
+
+        const expDesc = document.createElement("p");
+        expDesc.className = "text-gray-700 text-sm";
+        expDesc.textContent = exp.expDesc || "No description available";
+
+        expDiv.append(post, dates, expDesc);
+        expContainer.appendChild(expDiv);
+    })
+
+
+    content.append(closeBtn, img, name, role, phone, email,localisation, expContainer);
+    pop.appendChild(content);
+
+    pop.addEventListener("click", (e) => {
+        if (e.target === pop) pop.remove();
+    });
+
+    document.body.appendChild(pop);
+}
