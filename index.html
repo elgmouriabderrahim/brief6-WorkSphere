@@ -27,7 +27,7 @@
             <div class="x w-full md:hidden  text-lg text-white text-end"><i class="fa-solid fa-x"></i></div>
             <h1 class=" w-full text-white font-black text-center">Unassigned Staff</h1>
             <div class="US-Container bg-white overflow-y-auto w-full rounded-md p-4 h-[70vh] flex flex-col gap-2"></div>
-            <button class="AddNewWorkerBtn w-full text-white rounded-md bg-green-500 py-1">Add New Worker</button>
+            <button class="AddNewWorkerBtn w-full text-white rounded-md bg-green-500 py-1"><i class="fa-solid fa-user-plus"></i> Add New Worker</button>
         </div>
     </aside>
     <div class="modal fixed inset-0 bg-black md:bg-black/50 backdrop-blur-md hidden gap-2 z-50 p-4">
@@ -45,8 +45,8 @@
                 <select name="role" id="role" class="w-full border border-black rounded-md px-2 py-1">
                     <option value="">select a role</option>
                     <option value="Receptionniste">Receptionniste</option>
-                    <option value="TechnicienIT">Technicien IT</option>
-                    <option value="AgentDeScurite">Agent de sécurité</option>
+                    <option value="Technicien">Technicien IT</option>
+                    <option value="Scurite">Agent de sécurité</option>
                     <option value="Manager">Manager</option>
                     <option value="Nettoyage">Nettoyage</option>
                     <option value="Autres">Autre</option>
@@ -82,7 +82,7 @@
             </div>
 
             <div class="flex justify-between">
-                <button class="savebtn border border-black rounded-md px-8 bg-green-500 hover:bg-green-600 py-1 h-8">save</button>
+                <button data-save="new" class="savebtn border border-black rounded-md px-8 bg-green-500 hover:bg-green-600 py-1 h-8">save</button>
                 <button class="cancelbtn border border-black rounded-md px-8 bg-red-500 hover:bg-red-600 py-1 h-8">cancel</button>
             </div>
         </form>

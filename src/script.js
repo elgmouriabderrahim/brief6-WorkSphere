@@ -22,7 +22,7 @@ const Photo = document.getElementById("photo");
 const AddExp = document.getElementById("addExp");
 const Experiences = document.getElementById("experiences");
 
-const previmage = document.querySelector(".previmage")
+const previmage = document.querySelector(".previmage");
 
 let datecheck;
 let experiencestemp = [];
@@ -41,11 +41,12 @@ const SalleArchives = document.querySelector(".SalleArchives");
 
 const plusBtns = document.querySelectorAll(".plusBtn");
 
+let workerToEditId;
 
 const roleLimits = {
     Receptionniste: ['SalleConference', 'Reception', 'SallePersonnel', 'SalleArchives'],
-    TechnicienIT: ['SalleConference', 'SalleServeurs', 'SallePersonnel', 'SalleArchives'],
-    AgentDeScurite: ['SalleConference', 'SalleSecurite', 'SallePersonnel', 'SalleArchives'],
+    Technicien: ['SalleConference', 'SalleServeurs', 'SallePersonnel', 'SalleArchives'],
+    Scurite: ['SalleConference', 'SalleSecurite', 'SallePersonnel', 'SalleArchives'],
     Manager: ['SalleConference', 'Reception', 'SalleServeurs', 'SalleSecurite', 'SallePersonnel', 'SalleArchives'],
     Nettoyage: ['SalleConference','Reception','SalleServeurs','SalleSecurite','SallePersonnel'],
     Autres: ['SalleConference', 'SallePersonnel', 'SalleArchives']
@@ -104,7 +105,6 @@ cancelBtn.addEventListener("click", () => {
 })
 
 saveBtn.addEventListener("click", () => {
-
     experiencestemp = [];
 
     if (!nameRegex.test(Name.value))
@@ -155,7 +155,6 @@ saveBtn.addEventListener("click", () => {
 
             const startDate = new Date(expStart.value);
             const endDate = new Date(expEnd.value);
-            console.log("startDate:",startDate);
             if (startDate > endDate) {
                 datecheck = false;
                 experienceErr.innerText = "experience start date must be greater than end date";
@@ -191,13 +190,24 @@ saveBtn.addEventListener("click", () => {
             experiences: [],
         }
         newWorker.experiences = experiencestemp;
-        workers.push(newWorker);
-        console.log("pushed")
-        console.log(workers)
-        localStorage.setItem("workers", JSON.stringify(workers));
-
-        appendworkerAsUS(newWorker);
         
+        if(saveBtn.dataset.save === "new"){
+            workers.push(newWorker);
+            appendworkerAsUS(newWorker);
+            localStorage.setItem("workers", JSON.stringify(workers));
+        }else{
+            console.log(workers)
+            workers = workers.map(worker =>{
+                if(worker.id == workerToEditId)
+                    return newWorker;
+                else
+                    return worker;
+            })
+            localStorage.setItem("workers", JSON.stringify(workers));
+            Name.readOnly = false;
+            saveBtn.dataset.save = "new";
+            location.reload();
+        }
 
         Experiences.innerHTML = "";
         Name.value = "";
@@ -218,12 +228,13 @@ function appendworkerAsUS(newWorker){
     <span class="font-bold col-start-2 row-start-1">${newWorker.name}</span>
     <span class="col-start-2 row-start-2">${newWorker.role}</span>
     <i class="fa-solid fa-trash deleteWorkerBtn cursor-pointer hover:text-red-600 text-red-500 w-full text-end col-start-3 justify-self-end"></i>
+    <i class="fa-solid fa-pen-to-square editWorkerBtn cursor-pointer text-neutral-600 hover:text-black w-full text-end col-start-3 justify-self-end z-50"></i>
     `;
     newWorker.location = "USstaffzone";
+    newWorkerDiv.classList.add("transform", "hover:scale-[1.01]", "transition-transform", "duration-50", "ease-in-out", "hover:shadow-lg");
     USContainer.append(newWorkerDiv);
 
-    const profilephoto = newWorkerDiv.querySelector(".profilephoto");
-    listen(profilephoto);
+    listen(newWorkerDiv);
 
     const deleteWorkerBtn = newWorkerDiv.querySelector(".deleteWorkerBtn");
     deleteWorkerBtn.addEventListener("click", () => {
@@ -231,6 +242,12 @@ function appendworkerAsUS(newWorker){
         localStorage.setItem("workers", JSON.stringify(workers));
         newWorkerDiv.remove();
     })
+    
+    const editWorkerBtn = newWorkerDiv.querySelector(".editWorkerBtn");
+    editWorkerBtn.addEventListener("click", (e)=>{
+        e.stopPropagation();
+        editWorker(newWorker);
+    });
 }
 
 
@@ -239,18 +256,18 @@ AddExp.addEventListener("click", () => {
     experience.classList.add("relative", "py-4", "bg-neutral-100")
     experience.innerHTML = `
     <i class="x-exp fa-solid fa-x cursor-pointer bg-red-600 absolute top-0 right-0"></i>
-    <input type="text" placeholder="post" class="expTitle w-full px-2 py-1 border rounded">
+    <input type="text" placeholder="post *" class="expTitle w-full px-2 py-1 border rounded">
     <div class="flex gap-4 justify-between mt-2">
         <div>
-            <label>start date</label>
+            <label>start date *</label>
             <input type="date" class="expStart w-full px-2 py-1 border rounded">
         </div>
         <div>
-            <label>end date</label>
+            <label>end date *</label>
             <input type="date" class="expEnd w-full px-2 py-1 border rounded">
         </div>
     </div>
-    <textarea placeholder="Description" class="expDesc w-full px-2 py-1 mt-2 border rounded h-20 resize-none"></textarea>
+    <textarea placeholder="Description (Optional)" class="expDesc w-full px-2 py-1 mt-2 border rounded h-20 resize-none"></textarea>
     <p class="experienceErr text-red-600 text-sm mt-1"></p>
     `;
     const xExp = experience.querySelector(".x-exp");
@@ -282,7 +299,7 @@ function checkWorkerRole(workerRole, selectedspace){
         const pop = document.createElement("div");
         pop.className = "pop inset-0 bg-black/50 backdrop-blur-md absolute grid place-items-center z-50";
         pop.innerHTML = `
-            <div class="filteredlist relative flex flex-col gap-2 w-full md:w-[400px] p-2 h-[70vh] overflow-y-auto bg-white rounded-md">
+            <div class="filteredlist relative flex flex-col gap-2 w-[90%] md:w-[400px] p-2 h-[70vh] overflow-y-auto bg-white rounded-md">
                 <div class="x-filteredlist cursor-pointer text-red-600 absolute top-0 right-0 w-8 h-8">
                     <i class="fa-solid fa-x "></i>
                 </div>
@@ -308,10 +325,8 @@ function checkWorkerRole(workerRole, selectedspace){
                 <span class="font-bold col-start-2 row-start-1">${worker.name}</span>
                 <span class="col-start-2 row-start-2">${worker.role}</span>
                 `;
+                workerDiv.classList.add("transform", "hover:scale-[1.01]", "transition-transform", "duration-50", "ease-in-out", "hover:shadow-lg");
                 filteredlist.append(workerDiv);
-
-                const profilephoto = workerDiv.querySelector(".profilephoto");
-                listen(profilephoto);
             }
         })
         const selectedWorkers = document.querySelectorAll(".selectedWorker");
@@ -333,16 +348,16 @@ function checkWorkerRole(workerRole, selectedspace){
                                     clicked.className = "w-[30px] h-[30px] relative bg-neutral-500 rounded rounded-md";
                                     clicked.setAttribute("id", WORKER.id);
                                     clicked.innerHTML = `
-                                    <i class="x-profile fa-solid fa-right-to-bracket cursor-pointer text-xs bg-white rounded text-red-600 absolute top-0 right-0 transform -translate-y-1/3"></i>
+                                    <i class="x-profile fa-solid fa-right-to-bracket cursor-pointer text-xs bg-white rounded text-red-600 absolute top-0 right-0 transform -translate-y-full"></i>
                                     <img src="${WORKER.photo}" onerror="this.onerror=null; this.src='./src/images/profile.png';" class="profilephoto w-[30px] h-[30px] rounded-full object-cover">
                                     `;
                                     plusBtn.parentElement.append(clicked);
     
-                                    const profilephoto = clicked.querySelector(".profilephoto");
-                                    listen(profilephoto);
+                                    listen(clicked);
     
                                     const xProfile = clicked.querySelector(".x-profile");
-                                    xProfile.addEventListener("click", ()=>{
+                                    xProfile.addEventListener("click", (e)=>{
+                                        e.stopPropagation();
                                         limitation[plusBtn.id].nbr--;
                                         if(workers.every(w =>  w.location != plusBtn.id))
                                             plusBtn.parentElement.classList.remove("bg-teal-300/50");
@@ -362,10 +377,10 @@ function checkWorkerRole(workerRole, selectedspace){
     })
 })
 
-function listen(profilephoto){
-    profilephoto.addEventListener("click", ()=>{
+function listen(element){
+    element.addEventListener("click", ()=>{ 
         workers.forEach(worker => {
-            if(profilephoto.parentElement.id == worker.id)
+            if(element.id == worker.id)
                 descriptionPopUp(worker);
         })
     
@@ -376,51 +391,41 @@ function listen(profilephoto){
 function descriptionPopUp(worker) {
     const pop = document.createElement("div");
     pop.className = "inset-0 bg-black/50 backdrop-blur-md fixed grid place-items-center z-50 p-4";
+    const container =  document.createElement("div");
+    container.className = "bg-neutral-200 rounded-lg shadow-lg p-4 w-full h-[90vh] md:w-1/3 bg-neutral-200 relative overflow-y-auto";
 
     const content = document.createElement("div");
-    content.className = "bg-white rounded-lg shadow-lg p-4 w-full h-[90vh] md:w-2/3 lg:w-1/2 relative grid grid-cols-[1fr,2fr] overflow-y-auto";
+    content.className = "grid grid-cols-1 justify-items-center gap-y-2";
 
     const closeBtn = document.createElement("button");
     closeBtn.innerHTML = `<i class="fa-solid fa-x"></i>`;
-    closeBtn.className = "absolute top-0 right-0 font-bold text-red-500 hover:text-red-600";
+    closeBtn.className = "absolute top-4 right-4 font-bold text-red-500 hover:text-red-600";
     closeBtn.addEventListener("click", () => pop.remove());
 
     const img = document.createElement("img");
     img.src = worker.photo;
     img.onerror = () => img.src = "./src/images/profile.png";
-    img.className = "profilephoto w-2/3 aspect-square object-cover border border-black border-2 rounded-md mb-4 col-span-2 justify-self-center";
+    img.className = "profilephoto w-1/4 aspect-square object-cover border border-black border-2 rounded-full justify-self-center";
 
-    const namelabel = document.createElement("p");
-    namelabel.classList = "font-bold";
-    namelabel.innerText = "Name:";
     const name = document.createElement("p");
+    name.classList = "font-bold";
     name.textContent = worker.name;
-
-    const rolelabel = document.createElement("p");
-    rolelabel.innerText = "Role:";
+    
     const role = document.createElement("p");
     role.textContent = worker.role;
     
-    const phonelabel = document.createElement("p");
-    phonelabel.innerText = "Phone Number: ";
     const phone = document.createElement("p");
     phone.textContent = worker.phoneNumber;
     
-    const emaillabel = document.createElement("p");
-    emaillabel.innerText = "Email: ";
     const email = document.createElement("p");
     email.textContent = worker.email;
     
-    const localisationlabel = document.createElement("p");
-    localisationlabel.innerText = "Actual zone: ";
     const localisation = document.createElement("p");
     localisation.textContent = worker.location;
 
-
-
     const expContainer = document.createElement("div");
     if(worker.experiences.length > 0){
-        expContainer.className = " col-span-2";
+        expContainer.className = "w-full";
         expContainer.innerHTML = `<p class="font-bold underline text-center">Les Experiences</p>`;
     
         worker.experiences.forEach(exp =>{
@@ -446,10 +451,17 @@ function descriptionPopUp(worker) {
             expContainer.appendChild(expDiv);
         })
     }
+    const editbtn = document.createElement("button");
+    editbtn.className = "bg-green-500 border border-black rounded-md px-8";
+    editbtn.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>Edit Info`;
+    editbtn.addEventListener("click", ()=>{
+        editWorker(worker);
+        pop.remove();
+    });
 
-
-    content.append(closeBtn, img, namelabel, name, rolelabel, role, phonelabel, phone, emaillabel,  email, localisationlabel, localisation, expContainer);
-    pop.appendChild(content);
+    content.append(closeBtn, img, name, role, phone,  email, localisation, expContainer, editbtn);
+    container.appendChild(content);
+    pop.appendChild(container);
 
     pop.addEventListener("click", (e) => {
         if (e.target === pop) pop.remove();
@@ -458,3 +470,20 @@ function descriptionPopUp(worker) {
     document.body.appendChild(pop);
 }
 
+function editWorker(worker){
+    workerToEditId = worker.id;
+    modal.classList.add("flex");
+    modal.classList.remove("hidden");
+    Name.readOnly = true;
+    Name.value = worker.name;
+    Role.value = worker.role;
+    Email.value = worker.email;
+    PhoneNumber.value = worker.phoneNumber;
+    Photo.value = worker.photo;
+    if(worker.photo != "")
+        previmage.src = worker.photo;
+    saveBtn.dataset.save = "edit";
+}
+plusBtns.forEach(btn =>{
+    btn.classList.add("transform", "hover:scale-110", "transition-transform", "duration-50", "ease-in-out")
+})
