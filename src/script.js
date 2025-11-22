@@ -231,6 +231,7 @@ function appendworkerAsUS(newWorker){
     <i class="fa-solid fa-pen-to-square editWorkerBtn cursor-pointer text-neutral-600 hover:text-black w-full text-end col-start-3 justify-self-end z-50"></i>
     `;
     newWorker.location = "USstaffzone";
+    newWorkerDiv.classList.add("transform", "hover:scale-[1.01]", "transition-transform", "duration-50", "ease-in-out", "hover:shadow-lg");
     USContainer.append(newWorkerDiv);
 
     listen(newWorkerDiv);
@@ -324,6 +325,7 @@ function checkWorkerRole(workerRole, selectedspace){
                 <span class="font-bold col-start-2 row-start-1">${worker.name}</span>
                 <span class="col-start-2 row-start-2">${worker.role}</span>
                 `;
+                workerDiv.classList.add("transform", "hover:scale-[1.01]", "transition-transform", "duration-50", "ease-in-out", "hover:shadow-lg");
                 filteredlist.append(workerDiv);
             }
         })
@@ -483,5 +485,5 @@ function editWorker(worker){
     saveBtn.dataset.save = "edit";
 }
 plusBtns.forEach(btn =>{
-    btn.classList.add("hover:scale-110")
+    btn.classList.add("transform", "hover:scale-110", "transition-transform", "duration-50", "ease-in-out")
 })
