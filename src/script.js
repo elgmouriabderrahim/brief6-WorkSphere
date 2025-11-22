@@ -482,3 +482,6 @@ function editWorker(worker){
         previmage.src = worker.photo;
     saveBtn.dataset.save = "edit";
 }
+plusBtns.forEach(btn =>{
+    btn.classList.add("hover:scale-110")
+})
