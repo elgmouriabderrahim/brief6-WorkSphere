@@ -101,7 +101,19 @@ document.querySelector("form").addEventListener("submit", f => {
 
 cancelBtn.addEventListener("click", () => {
     modal.classList.remove("flex");
-    modal.classList.add("hidden")
+    modal.classList.add("hidden");
+    if(saveBtn.dataset.save === "edit"){
+        Name.readOnly = false;
+        saveBtn.dataset.save = "new";
+
+        Experiences.innerHTML = "";
+        Name.value = "";
+        Email.value = "";
+        PhoneNumber.value = "";
+        Role.value = "";
+        Photo.value = "";
+        previmage.src = "./src/images/profile.png";
+    }
 })
 
 saveBtn.addEventListener("click", () => {
