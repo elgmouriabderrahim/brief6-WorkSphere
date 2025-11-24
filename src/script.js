@@ -208,7 +208,6 @@ saveBtn.addEventListener("click", () => {
             appendworkerAsUS(newWorker);
             localStorage.setItem("workers", JSON.stringify(workers));
         }else{
-            console.log(workers)
             workers = workers.map(worker =>{
                 if(worker.id == workerToEditId)
                     return newWorker;
@@ -371,10 +370,11 @@ function checkWorkerRole(workerRole, selectedspace){
                                     xProfile.addEventListener("click", (e)=>{
                                         e.stopPropagation();
                                         limitation[plusBtn.id].nbr--;
-                                        if(workers.every(w =>  w.location != plusBtn.id))
-                                            plusBtn.parentElement.classList.remove("bg-teal-300/50");
                                         clicked.remove();
                                         appendworkerAsUS(WORKER);
+                                        if(workers.every(w =>  w.location != plusBtn.id))
+                                            plusBtn.parentElement.classList.remove("bg-teal-300/50");
+                                        
                                     })
                                     filteredlist.parentElement.remove();
                                 }
